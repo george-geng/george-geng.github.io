@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<link rel="shortcut icon" href="assets/favicon/favicon.ico">
+  <link rel="icon" sizes="16x16 32x32 64x64" href="assets/favicon/favicon.ico">
+  <link rel="icon" type="image/png" sizes="196x196" href="assets/favicon/favicon-192.png">
+  <link rel="icon" type="image/png" sizes="160x160" href="assets/favicon/favicon-160.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="assets/favicon/favicon-96.png">
+  <link rel="icon" type="image/png" sizes="64x64" href="assets/favicon/favicon-64.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16.png">
+  <link rel="apple-touch-icon" href="assets/favicon/favicon-57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="assets/favicon/favicon-114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="assets/favicon/favicon-72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="assets/favicon/favicon-144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="assets/favicon/favicon-60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="assets/favicon/favicon-120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="assets/favicon/favicon-76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="assets/favicon/favicon-152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/favicon-180.png">
+  <meta name="msapplication-TileColor" content="#FFFFFF">
+  <meta name="msapplication-TileImage" content="assets/favicon/favicon-144.png">
+  <meta name="msapplication-config" content="assets/favicon/browserconfig.xml">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+
+<head>
+ <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/javascript"
+    src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+    <script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+<style>  
+    div.padded {  
+      padding-top: 0px;  
+      padding-right: 100px;  
+      padding-bottom: 0.25in;  
+      padding-left: 100px;  
+    }  
+
+    p {
+    font-family: Didot;
+    color: #474747;   
+    }
+
+    p1 {
+    font-family: 'Futura PT Light', sans-serif;
+    line-height: 20px;
+    margin-bottom: 15px;
+    font-weight: 200;
+    letter-spacing: 1px;
+    font-size: 15px;
+  
+    }
+
+    p2 {
+    font-family: 'Courier New';
+    font-size: 15px;
+    }
+
+  </style> 
+<title> George Geng  </title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="style.css" media="screen" />
+</head>
+<body>
+<br />
+<h1 align="middle"><p>Fluid Simulation</p></h1>
+    <h2 align="middle"><p>George Geng</p></h2>
+
+    <div class="padded">
+        <p1>2016 was a wonderful year for fluids in animated films. The beauty in both Finding Dory and Moana left me open-mouthed with tears down my cheeks. Super inspired, I made it my goal over break to learn how to do something similar myself. I worked on understanding and implementing the postion based fluids alogrithm for incompressible fluids given by Miles Macklin and Matthias Muller in their paper, <a href="http://mmacklin.com/pbf_sig_preprint.pdf">here</a>.</p1>
+        <BR>&nbsp;<BR> 
+
+     
+        <p1>I used a CPU-based hashgrid for neighbor detection, and then a smoothing kernel for density constraint calculations. Position updates
+        were found with 10 iterations of Newton's method with a corrective artifical pressure term. This was done in OpenGL and C++, with the visualization code and super helpful guidance along the way provided by the TA of a graphics class I took last year, Weilun Sun. The results for now are below. </p1>
+
+   <BR>&nbsp;<BR> 
+    <div align="center">
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/ZmljM_CYghY" frameborder="0" allowfullscreen></iframe>
+    </div>
+   <BR>&nbsp;<BR>   
+        
+        <p1>A lot of future work can still be done (as cool as this was, it's still a far cry from the water in Moana). If I ever have a CUDA-enabled GPU to work with, I'd definitely try the GPU uniform grid for neighbor detection. I'm also still in in the process of implementing vorticity confinement and XSPH viscocity, which would enhance the simulation results even more. </p1>
+
+
+
+</div>
+</body>
+</html>
+
+
+
+
+

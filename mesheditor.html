@@ -1,0 +1,450 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="shortcut icon" href="assets/favicon/favicon.ico">
+  <link rel="icon" sizes="16x16 32x32 64x64" href="assets/favicon/favicon.ico">
+  <link rel="icon" type="image/png" sizes="196x196" href="assets/favicon/favicon-192.png">
+  <link rel="icon" type="image/png" sizes="160x160" href="assets/favicon/favicon-160.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="assets/favicon/favicon-96.png">
+  <link rel="icon" type="image/png" sizes="64x64" href="assets/favicon/favicon-64.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16.png">
+  <link rel="apple-touch-icon" href="assets/favicon/favicon-57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="assets/favicon/favicon-114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="assets/favicon/favicon-72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="assets/favicon/favicon-144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="assets/favicon/favicon-60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="assets/favicon/favicon-120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="assets/favicon/favicon-76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="assets/favicon/favicon-152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/favicon-180.png">
+  <meta name="msapplication-TileColor" content="#FFFFFF">
+  <meta name="msapplication-TileImage" content="assets/favicon/favicon-144.png">
+  <meta name="msapplication-config" content="assets/favicon/browserconfig.xml">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+    <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/javascript"
+    src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+    <script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+<style>  
+    div.padded {  
+      padding-top: 0px;  
+      padding-right: 100px;  
+      padding-bottom: 0.25in;  
+      padding-left: 100px;  
+    }  
+
+    p {
+    font-family: Didot;
+    color: #474747;   
+    }
+
+    p1 {
+    font-family: 'Futura PT Light', sans-serif;
+    line-height: 20px;
+    margin-bottom: 15px;
+    font-weight: 200;
+    letter-spacing: 1px;
+    font-size: 15px;
+  
+    }
+
+    p2 {
+    font-family: 'Courier New';
+    font-size: 15px;
+    }
+
+  </style> 
+<title> Mesh Editor</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="style.css" media="screen" />
+</head>
+<body>
+<br />
+<h1 align="middle"><p>Mesh Editor</p></h1>
+    <h2 align="middle"><p>George Geng</p></h2>
+
+    <div class="padded">
+        <p1>This project explored the geometry of 3D modeling through creating a tool
+            which can display and make simple edits to a COLLADA mesh file. It has
+            the ability to tessellate a Bezier surface, upsample a mesh, as well as provide
+            Phong shading and environment mapping. Implementing these functionalities relied on 
+            key concepts in computer graphics and modeling such as Bernstein polynomials and the 
+            halfedge data structure. In the end, the program was used to load and shade a model 
+            I created in the open-source 3D computer graphics and animation software, Blender! 
+        </p1>
+<br><br>
+<div align="center">
+        <table stlye="width=50%">
+        <tr>
+            <td><img src="assets/img/mesheditor/images/teapot header.png" width="500px"/>
+           
+        </table>
+        </div>
+
+    <h2 align="middle"><p>Part 1: Fun with Bezier Patches</p></h2>
+        <p1>To start off, I implemented the ability to tesselate Bezier patches, given a 4 x 4 grid 
+            of Bezier control points to represent the surface. The equation </p1>
+<br>
+        $$P(u, v) = \sum_{i=0}^m \sum_{j = 0}^n b_{i,j}B^m_i(u)B^n_j(v)$$ <br>
+<p1>
+        represents a Bezier surface as a continous set of Bezier curves. In this case, our Bezier 
+        patch is bicubic, so $n$ and $m$ are $3$. $B^m_i(u)$ and $B^n_j(v)$ are the Bernstein polynomials 
+        of degree $3$. The curve is paramterized in $uv$ coordinates from 0 to 1, and P(u,v) represents
+        the vector which gives the position of a point on the surface in 3D-space. Because 
+        the program loads all control points in a 4 x 4 matrix, the above equation can be expanded
+        in matrix form for convenience: 
+        <br><br>
+</p1>
+       $$ P(u, v) = \sum_{i=0}^3 \sum_{j = 0}^3 b_{i,j}B^m_i(u)B^n_j(v)$$ 
+               $$ =  \sum_{i=0}^3 [\sum_{j = 0}^3 b_{i,j}B^m_i(u)]  B^n_j(v)$$
+            $$ =  \sum_{i=0}^3 \begin{bmatrix} 1&u&u^2&u^3\end{bmatrix} 
+            \begin{bmatrix} 1&0&0&0\\-3&3&0&0\\3&-6&3&0\\-1&3&-3&1\end{bmatrix}
+            \begin{bmatrix} b_{0,j}\\b_{1,j}\\b_{2,j}\\b_{3,j}\end{bmatrix} 
+            B^3_j(v)$$
+
+             $$ =  \begin{bmatrix} 1&u&u^2&u^3\end{bmatrix} 
+            \begin{bmatrix} 1&0&0&0\\-3&3&0&0\\3&-6&3&0\\-1&3&-3&1\end{bmatrix}
+            \begin{bmatrix} b_{0,0}&b_{0,1}&b_{0,2}&b_{0,3}\\
+                            b_{1,0}&b_{1,1}&b_{1,2}&b_{1,3}\\
+                            b_{2,0}&b_{2,1}&b_{2,2}&b_{2,3}\\
+                            b_{3,0}&b_{3,1}&b_{3,2}&b_{3,3}\end{bmatrix} 
+            \begin{bmatrix} 1&-3&3&1\\0&3&-6&3\\0&0&3&-3\\0&0&0&1\end{bmatrix}
+            \begin{bmatrix} 1\\v\\v^2\\v^3\end{bmatrix}$$
+<p1>
+<br><br>
+        where the 2 matrices sandwiching the control point matrix are obtained with the thrid degree Bezier
+        polynomials. Because our control points $b_{i,j}$ are 3D coordiantes, I created 3 matrices--one for each of the $x, y, z$ coordinates
+        and applied the above equation. These matrices were declared in the BezierPatch header file and 
+        created in the preprocess fucntion. A 9 x 9 grid of evenly spaced $uv$ coorindates were used as sample points to evaluate
+        our Bezier surface. The resulting vectors were then taken 3 at a time to create tesselate the surface into triangles.
+        The results are shown here, on a teapot mesh. </p1>
+
+        <BR>&nbsp;<BR> 
+        <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/mesheditor/images/Part 1 deliverable.png" width="800px" />
+                    <figcaption align="middle"><p1>Tesselated teapot</p1></figcaption>
+                </tr>
+            </table>
+        </div>
+
+        <BR>&nbsp;<BR> 
+        
+        <p1>
+        A bug which I encountered was that the teapot seemed to be inside out for the longest time; that is, the outside seemed dark purple
+        while the inside was relatively light. The normals for my faces were facing the wrong way, which was resolved by passing in the 
+        vectors for each triangle in reverse order. </p1>
+
+    <h2 align="middle"> <p> Part 2: Average normals for half-edge meshes </p></h2>
+        <p1>Finding the area-weighted average normal for a vertex required us to iterate through all the neighboring vertices for a single vertex. This traversal was done through making use of the halfedge data structure. A mesh consists of faces, edges, vertices, and halfedges, which "tie together" all the other elements. A vertex has a pointer to a halfedge originating from it, an edge has a pointer to one of its two halfedges, a face has a pointer to one of its bordering halfedges, and a halgedge has pointer to its associated edge, its twin halfedge along its associated edge, associated face, and the next halfedge running along the same face. </p1>
+
+        <p1> We can iterate through the vertices around each vertex by starting from the twin of a vertex's halfedge (so that it points inwards, or from a neighboring vertex) and then repeatedly taking the twin of the next halfedge, ignoring faces on the boundary. </p1>
+        <BR>&nbsp;<BR> 
+
+        <div align="center">
+        <table stlye="width=100%">
+        <tr>
+            <td><img src="assets/img/mesheditor/images/Part 2 deliverable-3.png" width="800px" />
+            <figcaption align="middle"><p1>Smoothed teapot </p1></figcaption></td>
+        </table>
+        </div>
+        <BR>&nbsp;<BR> 
+        <div align="center">
+        <table stlye="width=100%">
+        <tr>
+            <td><img src="assets/img/mesheditor/images/Part 2 deliverable-1.png" width="800px" />
+            <figcaption align="middle"><p1>Smoothed handle</p1></figcaption></td>
+        </table>
+        </div>
+        <BR>&nbsp;<BR> 
+        <div align="center">
+        <table stlye="width=100%">
+        <tr>
+            <td><img src="assets/img/mesheditor/images/Part 2 deliverable-2.png" width="800px" />
+            <figcaption align="middle"><p1>Smoothed spout</p1></figcaption></td>
+        </table>
+        </div>
+        <BR>&nbsp;<BR> 
+    <p1> We can now view our meshes smoothed out. Little hiccups along the way included running into an infinite loop while iterating through the vertices because I started
+        from the halfedge associated with the vertex itself, instead of the twin. However, a closer examination of the mesh structure 
+        drawing it out on paper!) quickly debugged the problem.</p1>
+    
+    <h2 align="middle"><p>Part 3: Flipping Edges</p></h2>
+        <p1>In this portion, I added the ability for the tool to flip an edge (not on the boundary) in a given mesh. That is, flipping edge $cb$ in the below diagram should create a new edge $ad$ instead, and give us triangles $adc$ and $abd$. Theis is done by collecting every single element
+        in our mesh, and then systematically resetting all of their pointers. </p1>
+         <BR>&nbsp;<BR> 
+        <div align="center">
+        <table stlye="width=100%">
+        <tr>
+            <td><img src="assets/img/mesheditor/images/Part 3 diagram.jpg" width="800px"/>
+        </table>
+        </div>
+        <BR>&nbsp;<BR> 
+
+        <BR>&nbsp;<BR> 
+        <div align="center">
+        <table stlye="width=100%">
+        <tr>
+            <td><img src="assets/img/mesheditor/images/Part 3 deliverable 1.png" width="800px"/>
+            <figcaption align="middle"><p1>Successfully flipped diagonal edge</p1></figcaption></td>
+        </table>
+        </div>
+        <BR>&nbsp;<BR> 
+
+        <BR>&nbsp;<BR> 
+        <div align="center">
+        <table stlye="width=100%">
+        <tr>
+            <td><img src="assets/img/mesheditor/images/Part 3 deliverable 2.png" width="800px"/>
+            <figcaption align="middle"><p1>Successfully flipped vertical edge</p1></figcaption></td>
+        </table>
+        </div>
+        <BR>&nbsp;<BR> 
+
+        <BR>&nbsp;<BR> 
+        <div align="center">
+        <table stlye="width=100%">
+        <tr>
+            <td><img src="assets/img/mesheditor/images/Part 3 multiple flips.png" width="800px"/>
+            <figcaption align="middle"><p1>Successful multiple flips</p1></figcaption></td>
+        </table>
+        </div>
+        <BR>&nbsp;<BR> 
+
+        <p1> The difficult part of implmenting flipEdge and the source of all bugs was keeping track of and reassigning the pointers of every mesh element involved. Again, drawing a diagram and exhaustively
+        keeping track of each vertex, face, edge, and halfedge in a list proved extremeley helpful.
+        </p1>
+
+        <h2 align="middle">Part 4: Edge split</h2>
+        <p1> Next, I added the ability to split an edge, which creates a total of three new edges and 2 new faces.
+        As shown, splitting the edge $cb$ creates the edges $cm$, $mb$, $am$, and $md$ and
+        triangles $cam$, $cmd$, $amb$, and $dmb$.
+        </p1>
+
+        <BR>&nbsp;<BR> 
+        <div align="center">
+        <table stlye="width=100%">
+        <tr>
+            <td><img src="assets/img/mesheditor/images/Part 4 diagram.jpg" width="800px"/>
+        </table>
+        </div>
+        <BR>&nbsp;<BR> 
+       
+        <p1> This followed essentially the same formula and relied on the same general ideas as flipping an edge did in Part 3, in which I constructed a diagram and listed every element's pointers before and after the operation, but involved the creation of new meshelements and more reassignments. 
+        </p1>
+
+         <p1> A bug I encountered was that after a sequence of seemingly-successful flips, a face would disappear entirely.
+        </p1>
+
+        <BR>&nbsp;<BR> 
+        <div align="center">
+        <table stlye="width=100%">
+        <tr>
+            <td><img src="assets/img/mesheditor/images/Part 4 bug-deleted face.png" width="800px"/>
+            <figcaption align="middle"><p1>Deleted face after a succession of splits</p1></figcaption></td>
+        </table>
+        </div>
+        <BR>&nbsp;<BR> 
+
+        <p1> After closely re-examining the pointers to the faces, I noticed that for two of the "outside" halfedges edges, they incorrectly pointed inwards to one of the four faces. By assigning it instead to an arbitrary outside face (not visible in the example diagram), this resolved the problem.  
+        </p1>
+
+        <BR>&nbsp;<BR> 
+        <div align="center">
+        <table stlye="width=100%">
+        <tr>
+            <td><img src="assets/img/mesheditor/images/Part 4 deliverable 1.png" width="800px"/>
+            <figcaption align="middle"><p1>Successful multiple splits.</p1></figcaption></td>
+        </table>
+        </div>
+        <BR>&nbsp;<BR> 
+
+        <h2 align="middle"><p>Part 5: Upsampling via loop subdivision</p></h2>
+
+        <p1> The ability to split and flip an edge in our mesh itself is not altogether vastly interesting. However, the functionality implemented in the previous two sections can be used to upsample the image via loop subdivion. The idea behind this is analagous to upsampling via interpolation for processing an image; however the new positions of vertices were instead computed with a weighted average of its neighboring vertices.  
+        </p1>
+
+        <p1> The general algorithm for upsampling with this method is as follows: split every edge to create a new vertex along every edge in the mesh, flip the new edges which connect an old and a new vertex, and then move all vertices to its location--a precomputed average of its neighboring vertices before the split. These values were stored new in the newPosition field of each vertex, and reassigned only at the end after subdivision and edge flips had occured.
+        </p1>
+
+        <p1> One bug that had occured was that the newly computed vertices were consistently in the wrong position. </p1>
+
+<br><br>
+        <div align="center">
+        <table stlye="width=100%">
+        <tr>
+            <td><img src="assets/img/mesheditor/images/Part 5 deliverable-debug 1.png" width="800px"/>
+            <figcaption align="middle"><p1>Faulty vertex positions during upsampling</p1></figcaption></td>
+        </table>
+        </div>
+        <br><br>
+  
+
+        <p1> By examining the step in which newPosition was computed for each vertex in the mesh, I typecasted each
+        value to floats, and then later declared them as doubles for increased accuracy. This solved the issue. Another bug I encountered was a segmentation fault whenever upsampling the .bez teapot file, while it worked for the .dae ones. I later learned that this was because the spout was disconnected to the body in the .bez file and so I ran into boundary errors. The isBoundary() function for edges is inherently incorrect and checks a halfedge at random to see if it is on the boundary, instead of both. I resolved this issue by checking both the edge's halfedge and its twin to see if either are on the boundary, and now have the ability to upsample the .bez files as well.</p1>
+
+        <p1> The following are examples of upsampling on different meshes.</p1>
+
+        <BR>&nbsp;<BR> 
+        <div align="center">
+        <table stlye="width=100%">
+        <tr>
+            <td><img src="assets/img/mesheditor/images/Part 5 teapot 1.png" width="266px"/>
+            <td><img src="assets/img/mesheditor/images/Part 5 teapot 2.png" width="266px"/>
+            <td><img src="assets/img/mesheditor/images/Part 5 teapot 3.png" width="266px"/>
+        </table>
+         <figcaption align="middle"><p1>Upsampling the teapot mesh</p1></figcaption></td>
+        </div>
+
+        <BR>&nbsp;<BR> 
+        <div align="center">
+        <table stlye="width=100%">
+        <tr>
+            <td><img src="assets/img/mesheditor/images/Part 5 cube 1.png" width="200px"/>
+            <td><img src="assets/img/mesheditor/images/Part 5 cube 2.png" width="200px"/>
+            <td><img src="assets/img/mesheditor/images/Part 5 cube 3.png" width="200px"/>
+            <td><img src="assets/img/mesheditor/images/Part 5 cube 4.png" width="200px"/>
+        </table>
+         <figcaption align="middle"><p1>Upsampling a cube</p1></figcaption></td>
+        </div>
+
+        <BR>&nbsp;<BR> 
+        <div align="center">
+        <table stlye="width=100%">
+        <tr>
+            <td><img src="assets/img/mesheditor/images/Part 5 bean 1.png" width="266px"/>
+            <td><img src="assets/img/mesheditor/images/Part 5 bean 2.png" width="266px"/>
+            <td><img src="assets/img/mesheditor/images/Part 5 bean 3.png" width="266px"/>
+           
+        </table>
+         <figcaption align="middle"><p1>Upsampling a bean</p1></figcaption></td>
+        </div>
+
+        <BR>&nbsp;<BR> 
+
+        <div align="center">
+        <table stlye="width=100%">
+        <tr>
+            <td><img src="assets/img/mesheditor/images/Part 5 beast 1.png" width="400px"/>
+            <td><img src="assets/img/mesheditor/images/Part 5 beast 2.png" width="400px"/>
+           
+        </table>
+         <figcaption align="middle"><p1>Upsampling the beast!</p1></figcaption></td>
+        </div>
+
+        <BR>&nbsp;<BR> 
+
+      <h2 align="middle"><p>Part 6: Fun with Shaders</p></h2>
+      <p1> Next, I implemented the ability to add
+        Phong shading and environment map reflection shading to models with GLSL. 
+
+        The final resulting light in the Phong shading model is given by 
+        $$L = L_a + L_d + L_s$$ where $L_a$, $L_d$, $L_s$ are the ambient light,
+        diffuse light, and specular light respectively. $L_a$ is given by
+        $k_aI_a$, where $k_a$ is the ambient light coefficient and $I_a$ is the ambient
+        light denisty; these values were arbitrarily determined. $L_d$ is computed from the
+        unit normal vector to the surface and the unit vector pointing towards our light source.
+        Similarly, $L_s$ is computed with the unit normal vector and the bisecting vector
+        between the vector pointing from the surface to the light source and the vector
+        between the surface and the viewer's eye. These vectors were found given the
+        vertex of the surfae, the vertex of the light source, the vertex of the eye position,
+        and the outwards facing normal vector from the surface. The results of Phong shading are displayed
+        below. </p1> <br>
+
+        <div align="center">
+        <table stlye="width=100%">
+        <tr>
+            <td><img src="assets/img/mesheditor/images/Part 6 phong 1.png" width="266px"/>
+            <td><img src="assets/img/mesheditor/images/Part 6 phong 2.png" width="266px"/>
+            <td><img src="assets/img/mesheditor/images/Part 6 phong 3.png" width="266px"/>
+           
+        </table>
+         <figcaption align="middle"><p1>Phong shading on a teapot</p1></figcaption></td>
+        </div>
+
+     <br>
+       <p1> Note how the specular hightlights seem to follow the eye as we rotate around the model. For environment mapping, the reflection direction was computed from the surface normal vector and the vector towards the
+        position of the eye. The angles $\theta$ (angle between the vector projection on the xy plane and the x-axis) and $\rho$ (angle between the vector project on either the xz or yz plane and the z-axis) were computed from the reflection vector, and used to as texture coordinates for our envionrment texture file. The results of 
+        reflective environmental mapping are shown below&mdash;isn't that beautiful! </p1>
+ 
+ <br><br>
+        <div align="center">
+        <table stlye="width=100%">
+        <tr>
+            <td><img src="assets/img/mesheditor/images/Part 6 env 1.png" width="266px"/>
+            <td><img src="assets/img/mesheditor/images/Part 6 env 2.png" width="266px"/>
+            <td><img src="assets/img/mesheditor/images/Part 6 env 3.png" width="266px"/>
+           
+        </table>
+         <figcaption align="middle"><p1>Reflective environmental mapping on a teapot</p1></figcaption></td>
+        </div>
+
+        <BR>&nbsp;<BR> 
+
+
+
+<!-- Beginning to colorize emir.tif .....
+That took 38.3157029152 seconds
+Beginning to colorize harvesters.tif .....
+That took 35.6257050037 seconds
+Beginning to colorize icon.tif .....
+That took 39.9569461346 seconds
+Beginning to colorize lady.tif .....
+That took 36.4387001991 seconds
+Beginning to colorize monastery.jpg .....
+That took 0.291505098343 seconds
+Beginning to colorize nativity.jpg .....
+That took 0.318642139435 seconds
+Beginning to colorize self_portrait.tif .....
+That took 37.4016540051 seconds
+Beginning to colorize settlers.jpg .....
+That took 0.303668022156 seconds
+Beginning to colorize three_generations.tif .....
+That took 34.429831028 seconds
+Beginning to colorize train.tif .....
+That took 34.2188711166 seconds
+Beginning to colorize turkmen.tif .....
+That took 38.171736002 seconds
+Beginning to colorize village.tif .....
+That took 36.6425321102 seconds  -->
+
+
+
+ <!--    <h2 align="middle">Part 7: Fun with Blender</h2>
+    <p1>Now using 3D mesh modeling, here is a lightsaber handle I created in Blender!</p1>
+
+        <div align="center">
+        <table stlye="width=100%">
+        <tr>
+            <td><img src="images/lightsaber.png" width="800px"/>
+        </table>
+         <figcaption align="middle">Lightsaber.</figcaption></td>
+        </div>
+
+        <BR>&nbsp;<BR> 
+ -->
+</body> 
+</html>
+
+
+
+

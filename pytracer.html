@@ -1,0 +1,231 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="shortcut icon" href="assets/favicon/favicon.ico">
+  <link rel="icon" sizes="16x16 32x32 64x64" href="assets/favicon/favicon.ico">
+  <link rel="icon" type="image/png" sizes="196x196" href="assets/favicon/favicon-192.png">
+  <link rel="icon" type="image/png" sizes="160x160" href="assets/favicon/favicon-160.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="assets/favicon/favicon-96.png">
+  <link rel="icon" type="image/png" sizes="64x64" href="assets/favicon/favicon-64.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16.png">
+  <link rel="apple-touch-icon" href="assets/favicon/favicon-57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="assets/favicon/favicon-114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="assets/favicon/favicon-72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="assets/favicon/favicon-144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="assets/favicon/favicon-60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="assets/favicon/favicon-120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="assets/favicon/favicon-76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="assets/favicon/favicon-152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/favicon-180.png">
+  <meta name="msapplication-TileColor" content="#FFFFFF">
+  <meta name="msapplication-TileImage" content="assets/favicon/favicon-144.png">
+  <meta name="msapplication-config" content="assets/favicon/browserconfig.xml">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+ <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/javascript"
+    src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+    <script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+<style>  
+    div.padded {  
+      padding-top: 0px;  
+      padding-right: 100px;  
+      padding-bottom: 0.25in;  
+      padding-left: 100px;  
+    }  
+
+    p {
+    font-family: Didot;
+    color: #474747;   
+    }
+
+    p1 {
+    font-family: 'Futura PT Light', sans-serif;
+    line-height: 20px;
+    margin-bottom: 15px;
+    font-weight: 200;
+    letter-spacing: 1px;
+    font-size: 15px;
+  
+    }
+
+    p2 {
+    font-family: 'Courier New';
+    font-size: 15px;
+    }
+
+  </style> 
+<title> George Geng  </title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="style.css" media="screen" />
+</head>
+<body>
+<br />
+<h1 align="middle"><p>PyTracer</p></h1>
+    <h2 align="middle"><p>George Geng</p></h2>
+
+    <div class="padded">
+        <p1>Raytracing and light transport algorithms are the gold standard of rendering in the animation industry today (e.g., Pixar's RenderMan, Disney's Hyperion). While raytracing is much slower at solving the visibility problem than rasterizion, it is far better at shading and modeling physically-accurate lighting scenarios.</p1>
+        <BR>&nbsp;<BR> 
+
+        <p1>There are still many challenges today with raytracing&mdash;for example, it is very computationally expensive, and can run into problems with certain lighting situations like caustics&mdash;and there has been much research to address these problems. But the idea of the main algorithm, at its core, is simple and elegant. I read somewhere that someone wrote a simple raytracer on the back of a business card! </p1>
+
+        <BR>&nbsp;<BR> 
+        <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/pytracer/finalimagefixed.png" width="480px" />
+                    <figcaption align="middle"><p1>PyTracer Render</p1></figcaption>
+                </tr>
+            </table>
+        </div>
+
+        <BR>&nbsp;<BR>
+        <p1>Just for fun (and because I've finally finished binging The Office), I made it an exercise to write one on my own from scratch, but this time in Python. PyTracer has a long ways to go before it can compete with its bigger brother, the PathTracer, but the results are not bad for one file done in a scripting language! </p1>
+
+
+        <BR>&nbsp;<BR>
+        <p1>My first task was to just get the infamous BSOD&mdash;Black Screen of Doom. First I had to write a vec3 class used to store everything from positions and directions to color, and set up my camera (eye) at the origin. I then cast rays through every pixel in the image by finding the x, y, coordinates of each point, taking them from raster coordinates to NDC, to screen space, and then finally to world space. I used <p2>matplotlib.pyplot</p2> to write these final pixel colors into a matrix and save them as a png. In the end, this is what I had:</p1>
+
+
+        <BR>&nbsp;<BR> 
+        <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/pytracer/bsod.png" width="480px" />
+                    <figcaption align="middle"><p1>Black Screen of Doom</p1></figcaption>
+                </tr>
+            </table>
+        </div>
+        <BR>&nbsp;<BR> 
+
+        <p1>It might not look like a lot is going on in here, but really there is! Hundreds of thousands of rays are being constructed with origin at the eye and direction through each point in world space, and then cast into the scene, intersecting with nothing, and returning the black background color. (At least, that's what I hoped&mdash;for all I knew, everything could have been broken too.) </p1>
+        <BR>&nbsp;<BR>
+        <p1> But, I wanted to make things more interesting, so I introduced a <p2>Sphere</p2> class. Each sphere stores it's position on the screen, it's radius, and a diffuse color, and has an intersect method, which returns it's nearest intersection with a ray (provided that one exists, and that it isn't behind our camera). </p1>
+
+        <p1>Now, when the rendering loops calls <p2>trace()</p2>, <p2>trace()</p2> loops over every object (spheres, for now) in the scene and see if our ray intersects them, and returns the nearest object intersected as well as $t$, the paramter we can use later to find the hit point. While that information can be used later on to perform some nice shading, for now I just wanted to see if it was detecing intersections correctly. If there was an intersection, then I would color that pixel the diffuse color of the object at that point. </p1>
+
+        <BR>&nbsp;<BR> 
+        <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/pytracer/part1.png" width="480px" />
+                    <figcaption align="middle"><p1>Simple Spheres</p1></figcaption>
+                </tr>
+            </table>
+        </div>
+        <BR>&nbsp;<BR> 
+
+        <p1>After some debugging, I got these nice spheres! But anyone will tell you they don't really look like spheres yet, so it's time to a point light to the world as well as some Lambertian shading.</p1>
+  <BR>&nbsp;<BR> 
+        <p1>This was done in accordance to the Lambert cosine law&mdash;before <p2> castRay() </p2>only returned the color of the sphere. However, now it returns the diffuse color multiplied by the dot product between the surface normal and the direction from the point of intersection to the light. Now the sphere actually has some three dimensional form. </p1>
+
+
+        <BR>&nbsp;<BR> 
+        <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/pytracer/lambertiansphere.png" width="480px" />
+                    <figcaption align="middle"><p1>Lambertian Shading</p1></figcaption>
+                </tr>
+            </table>
+        </div>
+        <BR>&nbsp;<BR> 
+
+     <p1>But wait, things can get better. If I also add Blinn-Phong shading, we can get some nice specular highlights that give them even more form and a glossy quality to the surfaces.</p1>
+
+
+        <BR>&nbsp;<BR> 
+        <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/pytracer/phongsphere.png" width="480px" />
+                    <figcaption align="middle"><p1>Blinn-Phong</p1></figcaption>
+                </tr>
+            </table>
+        </div>        <BR>&nbsp;<BR> 
+ 
+    <p1>This is all very good for one sphere, but what if we had more than one object? Parts of one object may block the light from reaching another, causing regions to be in shadow. To simulate this, I can cast a shadow ray at the point of intersection before returning the color (with Lambertian and Blinn-Phong shading). A shadow ray is a ray with an origin at the point of intersection of our primary camera ray (adjusted slightly in the direction of the normal to avoid shadow acne from floating point errors), and a direction towards the light source. I then loop through all the primitives in our scene and see if the shadow ray intersects anything on its way to the light. If an intersection is detected, that region is in shadow, so I return a black color. If not, then I proceed as before!</p1>
+
+      <BR>&nbsp;<BR> 
+      <p1>With multiple objects now in the scene, it would also be interesting to have reflection! This was done by generating secondary rays at the point of intersection with a direction that is reflected across the normal, as per the Law of Reflection. We then want to see what color that light ray returns, if any, and attenuate that by some reflection factor.</p1>
+
+    <BR>&nbsp;<BR> 
+    <p1>How can we find what color the reflection ray returns? The answer is simple: I've already been building the function for that, <p2>trace()</p2>! By mutually recursing <p2>trace()</p2> with <p2>castRay()</p2>, I can simulate reflection. 
+    <BR>&nbsp;<BR> 
+    <p1>The one thing to consider is that this recursion can be infinite, as light rays right now bounce around infinite times. But in reality, light rays lose energy per bounce and die off slowly, so we can include a <p2>numHits</p2> variable to count the times we have cast a secondary ray. Once the counter exceeds <p2>MAXDEPTH</p2>, we can finish the recursion and return the color. The results are shown below:</p1>
+
+
+        <BR>&nbsp;<BR> 
+        <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/pytracer/reflections.png" width="480px" />
+                    <figcaption align="middle"><p1>Multiple Spheres with Reflection and Shadows</p1></figcaption>
+                </tr>
+            </table>
+        </div>
+      <BR>&nbsp;<BR> 
+
+      <p1>Right now, I only have spherical geometry, but it would nice to have some planes. So I defined a plane class, defined by a point in the plane and a normal, and gave it an intersection method. Now we can add a nice ground to the image:</p1>
+ 
+      <BR>&nbsp;<BR> 
+        <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/pytracer/reflective floor.png" width="480px" />
+                    <figcaption align="middle"><p1>Introducing Planes</p1></figcaption>
+                </tr>
+            </table>
+        </div>
+      <BR>&nbsp;<BR> 
+
+      <p1>Finally, it would make more interesting of an image if I had some sort of a checkerboard pattern! This was done by modifying the diffuse color of the plane. Since our plane lies perpendicular to the y-axis and only has variation in the x and z directions, I check to find regions where the x and z coordinates (scaled to integers) are both even, and return black if the hitPoint of the primary ray lies in that region. Finally, I can make the image below!</p1>
+    
+    
+      <BR>&nbsp;<BR> 
+        <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/pytracer/finalimagefixed.png" width="480px" />
+                    <figcaption align="middle"><p1>Voila!</p1></figcaption>
+                </tr>
+            </table>
+        </div>
+      <BR>&nbsp;<BR> 
+
+
+      <p1>This was a really fun introductory project, with pretty rewarding results as well. It was my own implementation, but I learned the theory from Scratchapixel.com and the inspiration to use matlibplot to generate images from Rossant's project at github.com/rossant.</p1>
+
+
+</div>
+</body>
+</html>
+
+
+
+

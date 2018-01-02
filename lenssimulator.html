@@ -1,0 +1,357 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+
+<link rel="shortcut icon" href="assets/favicon/favicon.ico">
+  <link rel="icon" sizes="16x16 32x32 64x64" href="assets/favicon/favicon.ico">
+  <link rel="icon" type="image/png" sizes="196x196" href="assets/favicon/favicon-192.png">
+  <link rel="icon" type="image/png" sizes="160x160" href="assets/favicon/favicon-160.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="assets/favicon/favicon-96.png">
+  <link rel="icon" type="image/png" sizes="64x64" href="assets/favicon/favicon-64.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16.png">
+  <link rel="apple-touch-icon" href="assets/favicon/favicon-57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="assets/favicon/favicon-114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="assets/favicon/favicon-72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="assets/favicon/favicon-144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="assets/favicon/favicon-60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="assets/favicon/favicon-120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="assets/favicon/favicon-76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="assets/favicon/favicon-152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/favicon-180.png">
+  <meta name="msapplication-TileColor" content="#FFFFFF">
+  <meta name="msapplication-TileImage" content="assets/favicon/favicon-144.png">
+  <meta name="msapplication-config" content="assets/favicon/browserconfig.xml">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+
+    
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/javascript"
+    src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+    <script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+<style>  
+    div.padded {  
+      padding-top: 0px;  
+      padding-right: 100px;  
+      padding-bottom: 0.25in;  
+      padding-left: 100px;  
+    }  
+
+    p {
+    font-family: Didot;
+    color: #474747;   
+    }
+
+    p1 {
+    font-family: 'Futura PT Light', sans-serif;
+    line-height: 20px;
+    margin-bottom: 15px;
+    font-weight: 200;
+    letter-spacing: 1px;
+    font-size: 15px;
+  
+    }
+
+    p2 {
+    font-family: 'Courier New';
+    font-size: 15px;
+    }
+
+  </style> 
+<title> Lens Simulator </title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="style.css" media="screen" />
+</head>
+<body>
+<br />
+<h1 align="middle"><p>Lens Simulator</p></h1>
+    <h2 align="middle"><p>George Geng</p></h2>
+
+    <div class="padded">
+        <p1>In this project, I added a realistic physically-based camera lens simulator to the pathtracer from the previous project, with the additional ability to autofucus. After this, I could simulate different physical effects on my scenes, such as a fisheye lens.</p1>
+ 
+    <h2 align="middle"><p>Part 1: Ray Generation and Intersection</p></h2>
+        <p1>We were given different <p2>LensElement</p2> objects with the ability to refract our virutal rays according to Snell's law $\frac{sin(\theta_1)}{sin(\theta_2)} = \frac{n_1}{n_2}$, and a combination of several <p2>LensElements </p2> gave us different <p2>Lens</p2> objects, which simulates different lenses we can switch between when rendering our scene, much like detachable DSLR lenses. </p1>
+
+        <p1>Pinhole cameras generally have poorer focus and require more light for a smaller aperature and far longer exposure times to get a sharp image without loss of brightness. While a larger aperature would allow more light to pass through, thereby increasing brightness, light overlap from neighboring parts of a scene will result in a blurrier image. Lenses have an advantage over traditional pinhole cameras in that they have the ability to focus light rays and converge them without sacrificing or loss of light. Also, the depth of field of a pinhole camera is essentially infinite, while working with lenses give us more control over the scene.</p1>
+
+        <p1>After adding the ability for <p2>LensElement</p2>s to pass a light ray through (by testing for intersections, and refracting according to Snell's law as in the previous project), we can now visualize the results of passing
+        light rays through our lenses. Here are the results of tracing multiple light rays through our virutal
+        double Gaussian lens, wide lens, telephoto lens, and fisheye lens, both forwards and backwards. Note where the rays converge, forming the conjugate point. By far, the most difficult debugging challenges arose from
+        refraction and Snell's law. My rays kept refracting through the first lens element in the double Gauss lens, but reflecting to where they originated from as soon as they reached the secound boundary. In the end, I debugged this issue by fixing the direction of my normal.</p1>
+
+             <BR>&nbsp;<BR> 
+            <BR>&nbsp;<BR> 
+        <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/lenssim/images/1 forwards.png" width="480px" />
+                    <figcaption align="middle"><p1>Double Gaussian Lens Forwards Trace</p1></figcaption>
+                </tr>
+            </table>
+        </div>
+            <BR>&nbsp;<BR> 
+        <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/lenssim/images/1 backwards.png" width="480px" />
+                    <figcaption align="middle"><p1>Double Gaussian Lens Backwards Trace</p1></figcaption>
+                </tr>
+            </table>
+        </div>
+    <BR>&nbsp;<BR> 
+               <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/lenssim/images/2 forwards.png" width="480px" />
+                    <figcaption align="middle"><p1>Wide Lens Forwards Trace</p1></figcaption>
+                </tr>
+            </table>
+        </div>
+            <BR>&nbsp;<BR> 
+        <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/lenssim/images/2 backwards.png" width="480px" />
+                    <figcaption align="middle"><p1>Wide Lens Backwards Trace</p1></figcaption>
+                </tr>
+            </table>
+        </div>
+            <BR>&nbsp;<BR> 
+               <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/lenssim/images/3 forwards.png" width="480px" />
+                    <figcaption align="middle"><p1>Telephoto Lens Forwards Trace</p1></figcaption>
+                </tr>
+            </table>
+        </div>
+            <BR>&nbsp;<BR> 
+        <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/lenssim/images/3 backwards.png" width="480px" />
+                    <figcaption align="middle"><p1>Telephoto Lens Backwards Trace</p1></figcaption>
+                </tr>
+            </table>
+        </div>
+            <BR>&nbsp;<BR> 
+               <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/lenssim/images/fishforwards.png" width="480px" />
+                    <figcaption align="middle"><p1>Fisheye Lens Forwards Trace</p1></figcaption>
+                </tr>
+            </table>
+        </div>    <BR>&nbsp;<BR> 
+        <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/lenssim/images/fishbackwards.png" width="480px" />
+                    <figcaption align="middle"><p1>Fisheye Lens Backwards Trace</p1></figcaption>
+                </tr>
+            </table>
+        </div>
+ 
+      <BR>&nbsp;<BR> 
+        <p1>Even at a glance, these pictures seem to make sense--for instance, examining the telephoto lens, we notice
+        that it focuses light rays coming from an extremely far away origin point. Next, I calculated focus parameters--the depth of the infinity focus sensor, the focal length of our lens, the close focus sensor depth, and its conjugate in world space. The results are displayed below.
+        </p1>
+        
+             <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/lenssim/images/table1.png" width="780px" />
+                    <figcaption align="middle"></figcaption>
+                </tr>
+            </table>
+        </div>
+
+         <BR>&nbsp;<BR> 
+        
+        <p1> For each of the lenses, there should be an inverse relationship between the sensor depth of a point and it's conjugate in the real world. The plots below, in 100 increments between the infinity focus depth to the close focus depth, demonstrate this is true and confirm that our tracing and <p2>focus_depth</p2> function work correctly. 
+        </p1>
+        
+
+          <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/lenssim/images/chart1.png" width="480px" />
+                    <figcaption align="middle"><p1>Double Gaussian graph</p1></figcaption>
+                </tr>
+            </table>
+        </div>     <BR>&nbsp;<BR> 
+              <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/lenssim/images/chart2.png" width="480px" />
+                    <figcaption align="middle"><p1>Wide Lens graph</p1></figcaption>
+                </tr>
+            </table>
+        </div>     <BR>&nbsp;<BR> 
+               <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/lenssim/images/chart3.png" width="480px" />
+                    <figcaption align="middle"><p1>Telephoto Lens graph</p1></figcaption>
+                </tr>
+            </table>
+        </div>    <BR>&nbsp;<BR> 
+
+            <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/lenssim/images/chart4.png" width="480px" />
+                    <figcaption align="middle"><p1>Fisheye Lens graph</p1></figcaption>
+                </tr>
+            </table>
+        </div>
+
+
+        
+         <BR>&nbsp;<BR> 
+        
+        <p1>In the case where a ray does not pass through our lens, I extended the <p2>generate_ray</p2> function to 
+        keep track of the number of rays tried, trying multiple attempts as long as it was below a limit of 10,
+        and a $cos^4(\theta)$ factor as well, which tells <p2>raytrace_pixel</p2> to trace a ray only if it's $cos^4(
+        \theta)$ factor was greater than 0. This extra check ensured that our radiance remains unbiased. </p1>
+
+       <p1> Now, we have a functional camera with different lens simulations. Below is a render of Lambertian
+        spheres from a fisheye lens view--note the interesting perspective. However, I had to manually adjust 
+        the sensor position to get the object in focus.</p1>
+<BR>&nbsp;<BR> 
+        
+
+        
+         <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/lenssim/images/CBspheres.png" width="480px" />
+                    <figcaption align="middle"><p1>Fisheye Lens on CBLambertian spheres, no autofocus</p1></figcaption>
+                </tr>
+            </table>
+        </div>
+        <BR>&nbsp;<BR> 
+    <h2 align="middle"><p>Part 2: Contrast-based Autofocus</p></h2>
+        <p1> Even though lens simulations have been implemented at this point, I still have to manually focus and adjust the sensor position. So here, I added an autofocusing routing based on a metric we compute. This project used contrast-based autofocus, so the metric should logically reflect some measure the difference of intensities of the red, green, blue channels of an image patch stored in our <p2>ImageBuffer</p2> from the average colors of the sample region. More specifically, we want the square of the difference (far below or far above the mean creates contrast), so I took the sum of the variances of each red, blue, green channel to compute the focus metric. The equation for variance is given by: $$\sigma^2 = \frac{\sum_{i=1}^{n}(x_i - \mu)^2} {n}$$ where $\sigma^2$ is the variance, $x_i$ is the value of our current channel (R, B, or G), $\mu$ is the corresponding channel's average, and n is our total number of samples (found by multipling the length and width of our image buffer). </p1>
+
+
+
+    <p1>Now, autofocus steps through the depths between <p2>infinity_focus</p2> and <p2>near_focus</p2> to find the position at which 
+    our image patch has the largest focus metric (contrasts the most). We found our step size by considering the maximum step for sensor_depth while keeping the object still in focus. This was given by the equation $d' = C*z_i/A$, where $C$ is size of our circle of confusion (which is easily found because we know our screen size) and $z_i/A$ is the ratio of our focal length to aperature size (which is 2 because of most lenses are $f/2$). </p1>
+
+         <BR>&nbsp;<BR> 
+    <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/lenssim/images/autofocuschart.png" width="480px" />
+                    <figcaption align="middle"><p1>Autofocus on CBDragon.dae</p1></figcaption>
+                </tr>
+            </table>
+        </div>    <BR>&nbsp;<BR> 
+
+
+      <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/lenssim/images/autoex.png" width="480px" />
+                    <figcaption align="middle"><p1>Autofocus sampled region</p1></figcaption>
+                </tr>
+            </table>
+        </div>    <BR>&nbsp;<BR> 
+
+    <p1>This shows the various values of our focus metric when we step from the infinity focus point to the close
+    focal point. There is a clear peak, which gives us the sensor depth we should use for autofocusing the image. To achive this, I selected a region with clear contrast, such as that near an edge. Here, I picked the a square which
+    contained the boundary between the dragon's neck in CBDraong.dae and the background of the scene.</p1>
+ <BR>&nbsp;<BR> 
+
+
+
+ <p1>Now, enjoying the fruit of my labors, I can run autofocus on a scene with each of the four lenses, from different perspectives.</p1> <BR>&nbsp;<BR> 
+
+      <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/lenssim/images/dragon1.png" width="480px" />
+                    <figcaption align="middle"><p1>Autofocus with Double Gauss Lens</p1></figcaption>
+                </tr>
+            </table>
+        </div>    <BR>&nbsp;<BR> 
+         <p1>Here in particular, with both the double Gaussian lens and the
+         wide lense, it is clear that the head is more focused than the rest of the image.</p1>
+ <BR>&nbsp;<BR> 
+         <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/lenssim/images/dragon2.png" width="480px" />
+                    <figcaption align="middle"><p1>Autofocus with Wide Lens</p1></figcaption>
+                </tr>
+            </table>
+        </div>    <BR>&nbsp;<BR> 
+        <p1>The dragon is in sharp focus even though I began far away from the model, as is expected
+        from a telephoto lens effect.</p1>
+          <BR>&nbsp;<BR> 
+        <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/lenssim/images/dragon3.png" width="480px" />
+                    <figcaption align="middle"><p1>Autofocus with Telephoto Lens</p1></figcaption>
+                </tr>
+            </table>
+        </div>    <BR>&nbsp;<BR> 
+        <p1>And finally, the fisheye lens gives an interesting perspective.</p1><BR>&nbsp;<BR> 
+         <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/lenssim/images/dragon4.png" width="480px" />
+                    <figcaption align="middle"><p1>Autofocus with Fisheye Lens</p1></figcaption>
+                </tr>
+            </table>
+        </div>
+ <BR>&nbsp;<BR> 
+         <p1>How neat! The results of this project were cool, to say the least. Given more time, I would
+         proably have tried to implement a more efficient contrast-based autofocus scheme, or explore
+         different directions such as hybrid autofocusing with phase detection as well.</p1>
+</div>
+</body>
+</html>
+
+
+
+

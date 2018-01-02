@@ -1,0 +1,400 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="shortcut icon" href="assets/favicon/favicon.ico">
+  <link rel="icon" sizes="16x16 32x32 64x64" href="assets/favicon/favicon.ico">
+  <link rel="icon" type="image/png" sizes="196x196" href="assets/favicon/favicon-192.png">
+  <link rel="icon" type="image/png" sizes="160x160" href="assets/favicon/favicon-160.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="assets/favicon/favicon-96.png">
+  <link rel="icon" type="image/png" sizes="64x64" href="assets/favicon/favicon-64.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16.png">
+  <link rel="apple-touch-icon" href="assets/favicon/favicon-57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="assets/favicon/favicon-114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="assets/favicon/favicon-72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="assets/favicon/favicon-144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="assets/favicon/favicon-60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="assets/favicon/favicon-120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="assets/favicon/favicon-76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="assets/favicon/favicon-152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/favicon-180.png">
+  <meta name="msapplication-TileColor" content="#FFFFFF">
+  <meta name="msapplication-TileImage" content="assets/favicon/favicon-144.png">
+  <meta name="msapplication-config" content="assets/favicon/browserconfig.xml">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/javascript"
+    src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+    <script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+<style>  
+    div.padded {  
+      padding-top: 0px;  
+      padding-right: 100px;  
+      padding-bottom: 0.25in;  
+      padding-left: 100px;  
+    }  
+
+    p {
+    font-family: Didot;
+    color: #474747;   
+    }
+
+    p1 {
+    font-family: 'Futura PT Light', sans-serif;
+    line-height: 20px;
+    margin-bottom: 15px;
+    font-weight: 200;
+    letter-spacing: 1px;
+    font-size: 15px;
+  
+    }
+
+    p2 {
+    font-family: 'Courier New';
+    font-size: 15px;
+    }
+
+  </style> 
+<title> Above the Clouds </title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="style.css" media="screen" />
+</head>
+<body>
+<br />
+<h1 align="middle"><p>Above the Clouds</p></h1>
+    <h2 align="middle"><p>George Geng</p></h2>
+
+<!-- *************************intro and abstract************************** -->
+    <div class="padded">
+        <p1>UP has always been one of my favorite movies. Inspired by the scenes in UP, I wanted to 
+        render a scene with clouds that was both believable and aesthetically compelling. Furthermore, I wanted to have continuous
+        rendering with an interactive component that would allow the user to have some control over the scene's appearance.
+        I accomplished both through <p2>Three.js</p2>, a JavaScript API for WebGL based graphics, and a GLSL shader which creates
+        clouds through ray marching. </p1>
+    </div>
+    <div class="padded">
+        <p1>Cloud modeling has many applications from movies to flight simulations, but also presents many challenges &mdash; the complexity of light behavior in particular. It is not for the faint of heart. But as Ellie Fredricksen was always fond of saying, "Adventure is out there!" </p1>
+    </div>
+        
+     <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/cloudimages/up.png" width="720px" />
+                    <figcaption align="middle"><p1>Scene from UP, a.k.a #goals</p1></figcaption>
+                </tr>
+            </table>
+    </div>
+
+
+ 
+    <h2 align="middle"><p>Implementation</p></h2>
+    <div class = "padded">
+        <p1>The bulk of this project consisted of creating my scene through a GLSL shader, and was inspired by the setup used by sites such as <p2> ShaderToy.com</p2>. GLSL shaders consist of a fragment shader and a vertex shader, little programs that live on the GPU, which are used at different points in the OpenGL rendering pipeline as shown here.</p1>
+    </div>
+             <BR>&nbsp;<BR> 
+             <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/cloudimages/pipeline.png" width="480px" />
+                    <figcaption align="middle"><p1>General Pipeline</p1></figcaption>
+                </tr>
+            </table>
+    </div>
+    <div class = "padded">
+ <BR>&nbsp;<BR> 
+    <p1>The vertex shader transforms the mesh vertices to the final screen position through matrix multiplications, taking them from a local model coordinate system to global world coordinates, and finally projecting them onto the screen. On the other hand, the fragment shader colors the pixels based on vertex attributes and the depth of each pixel, before passing them into the <p2> FrameBuffer</p2>.
+    The rest of the work in this pipeline is taken care of by the renderer provided by <p2>Three.js</p2>. In this approach, the scene was created by "painting" to the entire screen (i.e. the geometry to be colored is a plane), and so the vertex shader required was nothing more than the most basic "Hello World" shader. The fragment shader is where all the magic happens. 
+    </p1>
+    </div>
+
+    <div class = "padded">
+    <p1> I modeled the clouds by generating noise. In particular, Fractcal Brownian Motion noise is popular for cloud simulation, as it gives good results compared to other types such as Perlin noise or value-based noise. Note the lack of detail in particular.
+    </p1>
+    </div>
+    </div>
+
+        <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/cloudimages/perlin.png" width="300px" />
+                    <figcaption align="middle"><p1>Perlin noise</p1></figcaption>
+                </tr>
+            </table>
+        </div>
+        <div class = "padded">  <BR>&nbsp;<BR> 
+    <p1> Fractal Brownian Motion noise (fbm) however, takes a noise function and creates several octaves of noise, with each one increasing in frequency (lacunarity) and decreasing in amplitude (persistence). Here, it's applied to the same Perlin noise. The implementation looks like this: 
+
+    <xmp>
+    float fractalBrownianMotion(vec3 position)
+    {
+         float amplitude = 1.0;
+         float V = amplitude * Noise( position ); 
+         
+         for (some number of times, 2 or 3 is fine) {
+
+             V += amplitude * simpleNoiseFunction(position); 
+             Amplitude *= PERSISTENCE; 
+             position *= LACUNARITY;
+         }
+         
+         return clamp(V, 0., 1.); 
+    }
+    </xmp>
+
+    Doing so gives the following results. 
+    </p1>
+    </div>
+        <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/cloudimages/fbm.png" width="300px" />
+                    <figcaption align="middle"><p1>Fractal Brownian Motion noise</p1></figcaption>
+                </tr>
+            </table>
+        </div>
+           
+     <div class = "padded">
+      <BR>&nbsp;<BR> 
+        <p1>By setting the frequency to a uniform variable&mdash;one that is passed into the shader from the main program&mdash;I allowed the user to have some control over the noise, and therefore control the texture of the clouds and make them harder or softer. From there, fbm was used in a mapping function, $map$, to generate a procedural volume through which we could march our rays to gather information about the cloud density at our current pixel. For the next step in drawing the clouds, I used ray marching, a technique similar in concept to the idea of raytracing, which was implemented in the path tracer project. However, instead of finding the intersection with simple geometry, e.g. a sphere or triangle or bounding volume, ray marching instead points a ray at a certain direction and then marches along, stepping and accumulating data at each step. Here, it calls the mapping function at each step and accumulates the values into a final density, which is translated into a pixel color on the screen. The pseudocode is shown below:
+
+         <xmp>
+            float rayMarch(vec3 origin, vec3 dir, float t, vec3 backgroundColor) {
+                returnVec = vec4(0.0);
+                for(int i = 0; i < NUM_STEPS; i++ ) {
+
+                    if(returnVec.a > 1.|| t > someLimit) {
+                        break;
+                    }
+
+                    vec3 pos = origin + dir * t;
+                    den = mapFunction (pos); //sample the mapping function for procedurual volume generation
+                    color = vec3(1.0, den); // den is now the alpha value
+                    color.xyz *= mix(backgroundColor, niceCloudColor); //get cloud color and blend w background
+                    color *= hermiteInterpolation(lower, upper, mapFunction(pos + light)); //
+
+                    returnVec += color; //update returnVec
+                    t += stepSize;
+                }
+                
+                return clamp(returnVec,0.,1.);
+            }
+        </xmp>
+        </p1>
+
+
+
+    </div>
+
+
+    <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/cloudimages/raymarch.png" width="720px" />
+                    <figcaption align="middle"><p1>Ray Marching and Accumulation</p1></figcaption>
+                </tr>
+            </table>
+    </div>
+
+         <BR>&nbsp;<BR> 
+
+    <div class = "padded">      
+        <p1> The final result is multiplied by a scalar the user can set to simulate the albedo, a measure of how much light the cloud reflects. While it is not physically accurate, which would require light scattering, the results it gives look aesthetically believable. </p1>
+    </div>
+
+    <div class = "padded">
+       <p1>
+        From there, the <p2>main</p2> function fills in the rest of the scene, setting a background color vector to one of three different options (depending on the scene the user selects: morning, midday, or night). Finally, light was added into the scene by simulating the intensity of the light at each point by taking the dot product of the <p2>lightDirection</p2> and the direction in which the ray was traced <p2>dir</p2>, and then fading it out exponentially ${2}^{k  *  (\text{lightIntensity} - 1)}$ from the source. This was done several times with different parameters to create several "layers" added to the background color, in order to fade the light out realistically and have ambient lighting effects. The raymarch function takes the background color vector and "mixes" it into the scene, giving us the final color of that fragment in our scene. </p1>
+    </div> 
+    <div class = "padded">
+        <p1> If there's one thing that I'll remember for life after this project, it's that shaders are so much more powerful and versatile than I previously thought (after implementing the mesh editor). The results are displayed below; how exciting!
+        </p1>
+    </div>
+        
+
+        
+
+    <h2 align="middle"><p>Results</p></h2>
+    <div class = "padded">
+        <p1> The following is the default scene of the morning, which the user would see upon starting the program. Also shown is the menu which would allow the user to input uniforms, which would change the scene. </p1>
+    </div>
+
+
+    <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/cloudimages/scene1.png" width="720px" />
+                    <figcaption align="middle"><p1>Default morning scene</p1></figcaption>
+                </tr>
+            </table>
+        </div>    <BR>&nbsp;<BR> 
+
+
+      <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/cloudimages/menu.png" width="360px" />
+                    <figcaption align="middle"><p1>User controls</p1></figcaption>
+                </tr>
+            </table>
+        </div>    <BR>&nbsp;<BR> 
+
+
+    <div class = "padded"> <p1>
+        By varying the frequency of the noise, the user can control the cloud's texture, giving rise to softer pillow-like clouds or harder clouds.
+        </p1>
+    </div>
+
+
+      <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/cloudimages/hard.png" width="720px" />
+                    <figcaption align="middle"><p1>Hard Clouds</p1></figcaption>
+                </tr>
+            </table>
+        </div>    <BR>&nbsp;<BR> 
+
+      <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/cloudimages/soft.png" width="720px" />
+                    <figcaption align="middle"><p1>Soft Clouds</p1></figcaption>
+                </tr>
+            </table>
+        </div>    <BR>&nbsp;<BR> 
+
+    <div class = "padded"> <p1>
+    As mentioned before, the albedo can also be (albeit-o hackishly, but nicely!) simulated as shown below:
+        </p1>
+    </div>
+
+
+      <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/cloudimages/highalbedo.png" width="720px" />
+                    <figcaption align="middle"><p1>High albedo clouds</p1></figcaption>
+                </tr>
+            </table>
+        </div> 
+  <BR>&nbsp;<BR> 
+          <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/cloudimages/lowalbedo.png" width="720px" />
+                    <figcaption align="middle"><p1>Low albedo clouds</p1></figcaption>
+                </tr>
+            </table>
+        </div> 
+           <BR>&nbsp;<BR> 
+
+    <div class = "padded"> <p1>
+       By allowing the user to adjust the origin (translation) and the direction of the vector to be traced (applying a rotation matrix) I could change the viewing perspective of the scene, as well as zoom in and out.
+        </p1>
+    </div>
+
+       <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/cloudimages/adjustview.png" width="720px" />
+                    <figcaption align="middle"><p1>Translated up, zoomed in, rotated to see more sky</p1></figcaption>
+                </tr>
+            </table>
+        </div> 
+           <BR>&nbsp;<BR>
+
+ <div class = "padded">
+    <p1>Similarly, the viewer can pass in values to append to the light's position vector, changing its place in the sky. </p1>
+</div>
+<div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/cloudimages/movesun.png" width="720px" />
+                    <figcaption align="middle"><p1>Moving the sun upwards and to the right</p1></figcaption>
+                </tr>
+            </table>
+        </div> 
+           <BR>&nbsp;<BR> 
+
+
+ <div class = "padded">
+    <p1>Finally, as previously mentioned, the user can also decide the scene to render, from morning, midday, or night.</p1>
+</div>
+
+      <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/cloudimages/night.png" width="720px" />
+                    <figcaption align="middle"><p1>Good night!</p1></figcaption>
+                </tr>
+            </table>
+        </div> 
+  <BR>&nbsp;<BR> 
+          <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/cloudimages/day.png" width="720px" />
+                    <figcaption align="middle"><p1>Good day!</p1></figcaption>
+                </tr>
+            </table>
+        </div> 
+           <BR>&nbsp;<BR> 
+
+ <div class = "padded">
+ <p1>If one looks closely at the daytime scene, one might even expect to see an old man with a young boy and his dog, sailing through layers of fbm noise, in a house anchored to a thousand thousand balloons.</p1> <BR>&nbsp;<BR> 
+ </div>
+
+     <h2 align="middle"><p>References</p></h2>
+     <ul>
+
+     <div class = "padded">
+     <p1>
+  <li>ShaderToy.com</li>
+  <li>GameDev.net</li>
+  <li>Volumetric Rendering, from nopjia.blogspot.com</li>
+  <li>Real-time Volumetric Rendering Course Notes, from patapom.com</li>
+  </p1>
+  </div>
+</ul>
+
+   <BR>&nbsp;<BR> 
+
+
+</div>
+</body>
+</html>
+
+
+
+

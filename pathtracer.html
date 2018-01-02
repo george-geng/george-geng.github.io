@@ -1,0 +1,614 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+
+<link rel="shortcut icon" href="assets/favicon/favicon.ico">
+  <link rel="icon" sizes="16x16 32x32 64x64" href="assets/favicon/favicon.ico">
+  <link rel="icon" type="image/png" sizes="196x196" href="assets/favicon/favicon-192.png">
+  <link rel="icon" type="image/png" sizes="160x160" href="assets/favicon/favicon-160.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="assets/favicon/favicon-96.png">
+  <link rel="icon" type="image/png" sizes="64x64" href="assets/favicon/favicon-64.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16.png">
+  <link rel="apple-touch-icon" href="assets/favicon/favicon-57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="assets/favicon/favicon-114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="assets/favicon/favicon-72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="assets/favicon/favicon-144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="assets/favicon/favicon-60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="assets/favicon/favicon-120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="assets/favicon/favicon-76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="assets/favicon/favicon-152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/favicon-180.png">
+  <meta name="msapplication-TileColor" content="#FFFFFF">
+  <meta name="msapplication-TileImage" content="assets/favicon/favicon-144.png">
+  <meta name="msapplication-config" content="assets/favicon/browserconfig.xml">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+
+    
+ <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/javascript"
+    src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+    <script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+<style>  
+    div.padded {  
+      padding-top: 0px;  
+      padding-right: 100px;  
+      padding-bottom: 0.25in;  
+      padding-left: 100px;  
+    }  
+
+    p {
+    font-family: Didot;
+    color: #474747;   
+    }
+
+    p1 {
+    font-family: 'Futura PT Light', sans-serif;
+    line-height: 20px;
+    margin-bottom: 15px;
+    font-weight: 200;
+    letter-spacing: 1px;
+    font-size: 15px;
+  
+    }
+
+    p2 {
+    font-family: 'Courier New';
+    font-size: 15px;
+    }
+  </style> 
+
+<title>PathTracer</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="style.css" media="screen" />
+</head>
+<body>
+<br />
+<h1 align="middle"><p>Path Tracer</p></h1>
+    <h2 align="middle"><p>George Geng</p></h2>
+
+    <div class="padded">
+        <p1>In this fun project, I implemented the core functionality of a path-tracing renderer! It explores and 
+        relies on fundamental concepts in physics and computer graphics such as ray-casting and ray-scene intersections, ways to 
+        accelerate ray-tracing, and lighting techniques for different materials (i.e. matte, mirror, glass) with the 
+        bidirectional scattering distribution function (bsdf). By the end, I was able to trace and produce different
+        images from various .dae files, some composed of hundreds of thousands of primitives, along with different 
+        lighting and material effects. </p1>
+       </div>
+
+        <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/pathtrace/images/m100.png" width="600px" />
+             
+                </tr>
+            </table>
+        </div>
+
+
+    <h2 align="middle"> <p> Part 1: Ray Generation and Intersection </p> </h2>
+    	 <div class="padded">
+        <p1>The very first step in rendering a scene is to generate
+        rays throughout the image and then detect their intersections with any objects in the scene. Each pixel on the screen can be considered a little window, a hole in a mesh screen door through which we can cast generated rays. The representation of a ray in this project stores its origin and direction information in an origin vector a direction vector, as well as other information such as its depth. </p1> </div>
+
+         <div class="padded">
+        <p1>The rays were first randomly generated
+        through each pixel, and then their combined radiances were used to estimate the irradiance of their corresponding pixel. However, the inputs
+        to this fucntion were integers corrsponding to pixel space, and the
+        $camera\text{->}generate\text{_}ray()$ method of the camera had to convert them to coordinates in camera space on the sensor plane, 1 unit behind the "pinhole" of our camera. </p1>
+        </div>
+		
+		 <div class="padded">        
+        <p1>From there, their interesection with primitives&mdash;triangles and spheres&mdash;had to be tested for us to understand how the rays interacted with the scene itself, so that we could picutre the scene. A ray is represented by $\vec{o} + $ t$* \vec{d}$, where $\vec{o}$ and $\vec{d}$
+        are the origin and direction vectors. The equation of a plane containing a triangle
+        can be found with the normal and a point in the plane, and so we can solve for the
+        intersection point and use barycentric coordinates to see if it lies within the triangle, i.e. the ray intersects the triangle if the barycentric coordinates at the 
+        point of intersection with the plane are between 0 and 1. A similar procedure underlies the test for seeing if a ray intersects a sphere. Specifically, we used the Moller-Trumbore algorithm for finding the intersection as well as the barycentric coordinates
+        of the point due to its relatively inexpensive number of operations.</p1> 
+        </div>
+
+         <div class="padded">
+        <p1>It's important to note here that I had an error while testing the intersection with sphere&mdash;I was erroneously returning only the 
+        minimum intersection, while I should have instead also checked to see if the maximum intersection was in-bounds when the minimum was not. This produced no visible errors until I tried to implement refraction for the glass material. Massive shoutout to based god Ben.</p1>
+        </div>
+         <div class="padded">
+        <p1>At this point, a few small .dae files can be displayed (with normals shading only).
+        This is because our implementation is inefficient and naive in testing for intersections with primtives, a task which we can yet accelerate. </p1>
+        </div>
+        
+        <BR>&nbsp;<BR> 
+  
+        
+        <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/pathtrace/images/part1 spheres.png" width="480px" />
+                    <figcaption align="middle"><p1>Spheres in a Cornell Box</p1></figcaption>
+                </tr>
+            </table>
+        </div>
+  <BR>&nbsp;<BR> 
+        <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/pathtrace/images/part1 teapot.png" width="480px" />
+                    <figcaption align="middle"><p1>Teapot Model</p1></figcaption>
+                </tr>
+            </table>
+              <BR>&nbsp;<BR> 
+        </div><div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/pathtrace/images/part1 coil.png" width="480px" />
+                    <figcaption align="middle"><p1>Coil Model</p1></figcaption>
+                </tr>
+            </table>
+        </div>
+  <BR>&nbsp;<BR> 
+    <h2 align="middle"><p>Part 2: Acceleration with BVHs</p></h2>
+    
+     <div class="padded">
+    <p1>A BVH, or bounding volume hierarchy, is a tree in which each node is a "bounding box" structure
+    which holds our geometric primitives. Here, we add the ability to construct a BVH recursively from each mesh, which
+    greatly accelerates our ray trace. Now, instead of testing for intersections with every primitive, we can return
+    before reaching children primitives if the bounding volume of their parent is not hit.</p1> </div>
+     <div class="padded">
+    <p1> Here, I implemented a top-down construction of BVH, by first forming a node and then seeing if it contains
+    less than or equal to the maxmium amount of primitives a leaf node (a node which has no children,
+    so that we can simply test for intersection by iterating through its contained primitives) is allowed to contain. </p1>
+    </div>
+     <div class="padded"> <p1>
+    If not, then I take the extent (span between the minimum and maximum corners) of the box, choose the axis $x, y, z$ 
+    for which that value is greatest, and split the primitives into left and right groups based on if their centroid coordinate
+    is less than (left) or greater than (right) the midpoint along that axis. We continute until we reach the point where
+    the volume contains less than or equal to the maximum number of children a leaf is allowed to contain, and return from there.</p1> </div>
+     <div class="padded">
+    <p1>In the case where one of the left or right children contains no primitives and the other one contains all of them after a
+    split, we run into infinite recursion because the node which receives all the children will never reach the base case. To resolve this
+    edge case, I test to see if one half contains all the primitives. If it does, then simply split all the primtiives into two different
+    vectors and recurse on them instead, setting the results of that recursion to the children instead. </p1> </div>
+     <div class="padded">
+    <p1>Now, after constructing our BVH, we can find its intersection with the ray we cast. We can see if a ray intersects with a single bounding box volume by finding the six $x, y, z$ values where it interects with the planes which form the box, comparing them against each other to see if the intersection exists. Using this, we can rescursively find the intersections of a ray on a BVH. If it misses the outer 
+    bounding box entirely, then we can return false. If we hit a leaf, then we iterate through the children, setting our intersect to
+    the nearest intersection point and returning true. This forms the base case. Otherwise, we can recurse on the left and right children, and
+    return the nearer intersection from there. </p1> </div>
+     <div class="padded">
+    <p1>With this added functionality, now we can generate images out of really complicated meshes, as our tracing time goes from linear
+    to logarithmic!</p1> </div>
+
+        <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/pathtrace/images/part2_max.png" width="480px" />
+                    <figcaption align="middle"><p1>Model of Max Planck's head, with tens of thousands of triangles!</p1></figcaption>
+                </tr>
+            </table>
+        </div>
+  <BR>&nbsp;<BR> 
+        <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/pathtrace/images/part2_lucy.png" width="480px" />
+                    <figcaption align="middle"><p1>Lucy Model, with hundreds of thousands of triangles!</p1></figcaption>
+                </tr>
+            </table>
+        </div>
+  <BR>&nbsp;<BR> 
+        <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/pathtrace/images/part2_walle.png" width="480px" />
+                    <figcaption align="middle"><p1>WALL&middot;E model</p1></figcaption>
+                </tr>
+            </table>
+        </div>
+  <BR>&nbsp;<BR> 
+        <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/pathtrace/images/part2_bunny.png" width="480px" />
+                    <figcaption align="middle"><p1>Bunny model</p1></figcaption>
+                </tr>
+            </table>
+        </div>
+  <BR>&nbsp;<BR> 
+<h2 align="middle"> <p> Part 3: Direct Illumination </p> </h2>
+ <div class="padded">
+<p1>Here, I implemented a function for estimating the outgoing radiance at at a point on the surface hit by a ray to simulate direct lighting. It sums
+over all the light sources in the scene and samples each light in a method
+based on Monte Carlo integration. Additionally, a localized coordinate system at the point of intersection was first created, using the normal to define the $z$ axis, which would be useful for computing BSDFs later on. </p1> </div>
+
+ <div class="padded">
+<p1>While sampling each light, I obtained a probabalistically sampled unit vector pointing towards the light source and the distance to that light, which were used to find the direction and max $t$ respectively of a shadow ray.
+By seeing if this ray intersected with anything before reaching the light, I was able to simulate shadows and darker regions in the image: only
+return a non-black Spectrum if the shadow ray <i>did</i> reach the light. If so, I found the BSDF, attenuated by the cosine factor for lambertian shading, and multiplied by the color of the light to find a final irradiance. This was divided by the probability distributive function (as Monte Carlo integration requires, because we are sampling area light sources) and averaged by the number of samples.
+This process was done for each light in the scene and the resulting spectrums were summed together, to produce the lovely direct lighting effect on these images!</p1> </div>
+
+  <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/pathtrace/images/part3_dragon.png" width="480px" />
+                    <figcaption align="middle"><p1>Shaded dragon with Direct Illum</p1></figcaption>
+                </tr>
+            </table>
+        </div>
+  <BR>&nbsp;<BR> 
+        <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/pathtrace/images/part3_peter.png" width="480px" />
+                    <figcaption align="middle"><p1>A guy named Peter</p1></figcaption>
+                </tr>
+            </table>
+        </div>
+  <BR>&nbsp;<BR> 
+        <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/pathtrace/images/part3_beast.png" width="480px" />
+                    <figcaption align="middle"><p1>Beast model</p1></figcaption>
+                </tr>
+            </table>
+        </div>
+  <BR>&nbsp;<BR> 
+        <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/pathtrace/images/part3_building.png" width="480px" />
+                    <figcaption align="middle"><p1>Building model</p1></figcaption>
+                </tr>
+            </table>
+        </div>  <BR>&nbsp;<BR> 
+ <div class="padded">
+    <p1>Now, the number of light rays we cast have a more noticeable effect, particularly around the shadows. Note
+    the noise around the shadows near the base of the bunny when we cast 16 rays pixel.</p1> </div>
+    <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/pathtrace/images/bunny 16.png" width="480px" />
+                    <figcaption align="middle"><p1>Bunny Model, $s=16$</p1></figcaption>
+                </tr>
+            </table>
+        </div>  <BR>&nbsp;<BR> 
+ <div class="padded">
+    <p1>Below is the same file, but rendered with 256 rays through each pixel. The noise around the shadow images has become particularly
+    less noticeable, and the image is smoother in general.</p1> </div>
+      <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/pathtrace/images/bunny 256.png" width="480px" />
+                    <figcaption align="middle"><p1>Bunny Model, $s=256$</p1></figcaption>
+                </tr>
+            </table>
+        </div>      <BR>&nbsp;<BR> 
+ <div class="padded">
+    <p1>The same scene with 64 rays through each pixel is shown here for reference. While the 256 sample is still noticeably smoother, the difference between 64 and 256 rays per pixel appears less pronounced than the visible difference bewtween 16 and 64. After a certain point,
+    our eyes may no longer be able to tell the difference!</p1>
+    </div>
+
+    <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/pathtrace/images/bunny 64.png" width="480px" />
+                    <figcaption align="middle"><p1>Bunny Model, $s=64$</p1></figcaption>
+                </tr>
+            </table>
+        </div>    
+
+    <h2 align="middle"> <p> Part 4: Indirect Illumination </p> </h2> 
+
+     <div class="padded">
+    <p1>Next, to add indirect lighting, I added a function which 
+    mutually recursed with $trace\text{_}ray$ to simulate the indirect lighting at a point after a ray hit. At the intersection point
+    with the surface, it takes one sample from the BSDF at the surface. From there, it plays Russian roulette to determine whether or not to terminate the ray, constructing the probability
+    so that it is proportional to the reflectance of the BSDF (the larger the reflectance, the less likely it is to terminate; this of course intuitively makes sense!). 
+     </p1> </div>
+      <div class="padded">
+     <p1> In the case it does not terminate, then create a ray which has one less depth (approaching the cutoff point), with an origin near the original intersection point and pointing towards the incoming radiance; this new light ray is like a "bounce" of the original one! It
+     then goes into $trace\text{_}ray$ (the rescursive step), where we approximate its incoming radiance and convert it into an outgoing radiance estimator. For comparison, here is the lovely Lucy with only direct illumination at work.</p1> 
+     </div>
+     <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/pathtrace/images/lucy_direct.png" width="480px" />
+                    <figcaption align="middle"><p1>Direct Illum only</p1></figcaption>
+                </tr>
+            </table>
+        </div>       <BR>&nbsp;<BR> 
+    <div class="padded">
+    <p1> We can see a lot more detail, especially in the lower shadowed regions, when we render Lucy with indirect illumination only. However, also note the lack of contrast and weak shadows.</p1> </div>
+
+    <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/pathtrace/images/lucy_indirect.png" width="480px" />
+                    <figcaption align="middle"><p1>Indirect Illum only</p1></figcaption>
+                </tr>
+            </table>
+        </div>      <BR>&nbsp;<BR> 
+ <div class="padded">
+    </p1>Combine both, and you get something wonderful!</p1> </div>
+
+    <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/pathtrace/images/lucy_both.png" width="480px" />
+                    <figcaption align="middle"><p1>Lucy in all her glory</p1></figcaption>
+                </tr>
+            </table>
+        </div>      <BR>&nbsp;<BR> 
+         <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/pathtrace/images/bunny_both.png" width="480px" />
+                    <figcaption align="middle"><p1>Bunny </p1></figcaption>
+                </tr>
+            </table>
+        </div>      <BR>&nbsp;<BR> 
+         <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/pathtrace/images/part4_64.png" width="480px" />
+                    <figcaption align="middle"><p1>Spheres, $s=64$</p1></figcaption>
+                </tr>
+            </table>
+        </div>      <BR>&nbsp;<BR> 
+
+ <div class="padded">
+       <p1>As with only indirect lighting, the reduction in noise is still visible when we have both models
+       of illumination when we increase the ray per pixel denisty. This is evident when we adjust the number
+       of samples in the scene with the spheres:</p1> </div>
+          <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/pathtrace/images/part4_16.png" width="480px" />
+                    <figcaption align="middle"><p1>Spheres, $s=16$</p1></figcaption>
+                </tr>
+            </table>
+        </div>      <BR>&nbsp;<BR> 
+
+           <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/pathtrace/images/part4_128.png" width="480px" />
+                    <figcaption align="middle"><p1>Spheres, $s=128$</p1></figcaption>
+                </tr>
+            </table>
+        </div>      <BR>&nbsp;<BR> 
+
+        <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/pathtrace/images/part4_1024.png" width="480px" />
+                    <figcaption align="middle"><p1>Spheres, $s=1024$</p1></figcaption>
+                </tr>
+            </table>
+        </div>      <BR>&nbsp;<BR> 
+ <div class="padded">
+        <p1>When we cast 1024 rays per pixel, any artifacts are for the most part nearly indistinguishable!
+        By the same token, increasing the depth of the ray (while keeping all else constant) also has an effect
+        on the image, but not really by reducing the amount of noise!</p1> </div>
+
+
+        <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/pathtrace/images/part4 m_1.png" width="480px" />
+                    <figcaption align="middle"><p1>Spheres, $m=1$ </p1></figcaption>
+                </tr>
+            </table>
+        </div>    
+
+  <BR>&nbsp;<BR> 
+        <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/pathtrace/images/part4 m_10.png" width="480px" />
+                    <figcaption align="middle"><p1>Spheres, $m=10$ </p1></figcaption>
+                </tr>
+            </table>
+        </div>      <BR>&nbsp;<BR> 
+ <div class="padded">
+        </p1> But by "blending" and "smoothing" out the lighting instead, which makes sense, the more light bounces around! This can be most clearly seen in the shadows of the spheres when we use a sample rate
+        of 16 rays per pixel and adjust the maximum ray depth $m$. Note the blending of black to blue or red when $m = 10$. </p1> </div>
+
+
+        <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/pathtrace/images/part4 m_20.png" width="480px" />
+                    <figcaption align="middle"><p1>Spheres, $m=20$</p1> </figcaption>
+                </tr>
+            </table>
+        </div>      <BR>&nbsp;<BR> 
+ <div class="padded">
+        <p1>When we have $m = 20$, the difference is hardly any more noticeable. However, our surfaces here are
+        matte&mdash;things may become more interesting when working with other materials which reflect or refract the light...</p1> </div>
+
+
+        <h2 align="middle"> <p> Part 5: Materials </p></h2>
+         <div class="padded">
+<p1>        ...which brings us to the grand finale, using BSDFs to simulate the interaction of light with different materials, namely mirror and glass-like surfaces! The implementatino of the mirror BSDF relied mostly on the idea that in reflection, the incident ray forms the same angle as the output ray about a normal to the surface (as mentioned in part 4, here our normals are always $<0,0,1>$ with respect to a localized coordinate system near the point of intersection). Given the incoming ray, I can find the output as per the following diagram: </p1> </div>
+
+     <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/pathtrace/images/reflection.png" width="480px" />
+                    <figcaption align="middle"></figcaption>
+                </tr>
+            </table>        
+  </div>     <BR>&nbsp;<BR> 
+   <div class="padded"> 
+      <p1>  We have $\vec{o} = 2(\vec{i}\cdot \vec{n})\vec{n} - \vec{i}$, where $n$ is the normal, $o$ is the reflection direction we seek, and $i$ is the input direction. Using this value, I can obtain the BSDF for a mirror-like material with a reflection spectrum. Similarly, I computed the refraction direction using Snell's law. Given a refraction scenario such as this, </p1> </div>
+
+     <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/pathtrace/images/refraction.png" width="480px" />
+                    <figcaption align="middle"></figcaption>
+                </tr>
+            </table> 
+              </div>     <BR>&nbsp;<BR>     
+ <div class="padded">
+<p1>
+        Snell's law says that $n_o * sin(\theta_o) = n_i * sin(\theta_i)$, where $n_o$ and $n_i$ are the 
+        indicies of refraction for materials $o$ and $i$ respectively. Using trignometric functions and vector addition, the output direction can be caluclated from Snell's law, the normal, and the input vector.
+        I have to be careful to account for the case in which the ray may be traveling from the glass to the air; in that case where the 2nd material has a smaller index of refraction than the first, total internal reflection is possible. Additionally, we must reverse $n_o$ and $n_i$ to obtain the correct calculation.
+</p1> </div>
+ <div class="padded">
+    <p1> Now, we can see the beautiful results on a mirror ball and a glass ball! Here, they are shown with varying maximum ray depths, from 1 to 100. </p1> </div>
+    <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/pathtrace/images/m1.png" width="480px" />
+                    <figcaption align="middle"><p1>$m = 1$</p1></figcaption>
+                </tr>
+            </table> 
+              </div>     <BR>&nbsp;<BR> 
+    <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/pathtrace/images/m10.png" width="480px" />
+                    <figcaption align="middle"><p1>$m = 10$</p1></figcaption>
+                </tr>
+            </table> 
+              </div>     <BR>&nbsp;<BR> 
+        <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/pathtrace/images/m20.png" width="480px" />
+                    <figcaption align="middle"><p1>$m = 20$</p1></figcaption>
+                </tr>
+            </table> 
+              </div>       <BR>&nbsp;<BR> 
+         <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/pathtrace/images/m75.png" width="480px" />
+                    <figcaption align="middle"><p1>$m = 75$</p1></figcaption>
+                </tr>
+            </table> 
+              </div>       <BR>&nbsp;<BR> 
+
+     <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/pathtrace/images/m100.png" width="480px" />
+                    <figcaption align="middle"><p1>$m = 100$</p1></figcaption>
+                </tr>
+            </table> 
+              </div>       <BR>&nbsp;<BR>      
+ <div class="padded">
+            <p1> On the mirror ball, we can see specular highlights in each of the scenes, and the refraction is demonstrated in the blue region within the glass ball on the right. Due to the high ray per pixel density of the image, they all look similar despite having varying maximum ray depths (many would likely terminate eventually before reaching the bottom, anyways) except for the one in which m = 1.
+            While this allows for reflection (one bounce before depth == 0), refraction is impossible and the glass ball is accordingly black. </p1> </div>
+ <div class="padded">
+            <p1> As before, the number of samples per pixel plays the largest role in determining the quality of the final image. A reflective dragon is shown here with 1, 4, 16, 64, and 1024 samples per pixel. </p1> </div>
+             <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/pathtrace/images/dragon_1.png" width="480px" />
+                    <figcaption align="middle"><p1>$s = 1$</p1></figcaption>
+                </tr>
+            </table> 
+              </div>   <BR>&nbsp;<BR> 
+
+
+   <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/pathtrace/images/dragon_4.png" width="480px" />
+                    <figcaption align="middle"><p1>$s = 4$</p1></figcaption>
+                </tr>
+            </table> 
+              </div>   <BR>&nbsp;<BR> 
+                 <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/pathtrace/images/dragon_16.png" width="480px" />
+                    <figcaption align="middle"><p1>$s = 16$</p1></figcaption>
+                </tr>
+            </table> 
+              </div>   <BR>&nbsp;<BR> 
+                 <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/pathtrace/images/dragon_64.png" width="480px" />
+                    <figcaption align="middle"><p1>$s = 64$</p1></figcaption>
+                </tr>
+            </table> 
+              </div>   <BR>&nbsp;<BR> 
+                 <div align="center">
+            <table style="width=100%">
+                <tr>
+                    <td align="middle">
+                    <img src="assets/img/pathtrace/images/dragon_1024.png" width="480px" />
+                    <figcaption align="middle"><p1>$s = 1024$</p1></figcaption>
+                </tr>
+            </table> 
+              </div>   <BR>&nbsp;<BR> 
+
+ <div class="padded"> <p1>
+As expected, more samples per pixel gave sharper images, even when keeping samples per light and maximum ray_depth constant. Overall, this project was both very challenging but by far the most rewarding, and fun to create.
+</p1> </div>
+
+
+
+</body>
+</html>
+
+
+
+
