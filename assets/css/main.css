@@ -340,6 +340,12 @@ bt {
 
 }
 
+.item {
+  width: 220px;
+  margin: 10px;
+  float: left;
+}
+
 .marg-bott{
   margin-bottom: 20px;
 }
