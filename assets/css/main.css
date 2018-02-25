@@ -349,3 +349,48 @@ bt {
 .marg-bott{
   margin-bottom: 20px;
 }
+
+#masonry-grid {
+  max-width: 1000px ;
+  margin: auto;
+}
+
+.grid-sizer, .grid-item {
+  width: calc((100% - 30px) / 3);
+  margin-bottom: 15px;
+}
+
+.grid-item img {
+  width: 100%;
+}
+
+.grid-item-click {
+  position: fixed !important;
+  z-index: 3;
+  height: 80%;
+  top: 10% !important;
+  left: 25% !important;
+}
+
+#grid-item img {
+  width: 100%;
+}
+
+.grid-item-click-1 {
+  position: fixed !important;
+  z-index: 3;
+  height: calc((100% - 30px) / 3);
+  top: 5% !important;
+  left: 35% !important;
+}
+
+#overlay {
+  display: none;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.75);
+  top: 0px;
+  left: 0px;
+  z-index: 2;
+}
