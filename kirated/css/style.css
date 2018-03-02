@@ -528,6 +528,7 @@ a.scrolldown {
 	margin: 50px 30px;
 	margin-bottom: 0px;
 	float: left;
+	overflow: hidden; 
 }
 .widget a {
 	font-size: 12px;

@@ -105,7 +105,7 @@
   <body>
 
    <!-- +++++ Welcome Section +++++ -->
-<!-- 	<div id="w1">
+	<div id="w1">
 	    <div class="container">
 			<div class="row">
 				<div class="col-lg-8 col-lg-offset-2 centered">
@@ -118,11 +118,11 @@
 
 	<div class="centered">
 		<img src="assets/img/name.png" width = "500" height = "125">
-	</div> -->
+	</div>
 
      	   
     <!-- Static navbar -->
-    <!-- <div class="navbar navbar-inverse navbar-static-top">
+    <div class="navbar navbar-inverse navbar-static-top">
        <div class="col-lg-8 col-lg-offset-2 centered">
           <ul class="nav navbar-nav">
            <li><a href="index.html">Work </a></li>
@@ -132,10 +132,10 @@
           </ul>
     	</div>  
     </div>	
-    <hr> -->
+    <hr>
 	
 	<!-- +++++ Projects Section +++++ -->
-<!-- 	 
+	 
 	<div class="centered">
 		<br>
 		<h3>ILLUSTRATION &amp; DESIGN</h3>
@@ -193,7 +193,7 @@
 	<div class = "centered">
 		<br>
 		<p>Washing Belle</p>
-	</div> <br><br> -->
+	</div> <br><br>
 <!-- 
 	<div class="centered">
 		<img src="assets/img/cindy night final.jpg" width = "650"/>
@@ -203,7 +203,7 @@
 		<!-- <p>Rainy Friday</p> -->
 	<!-- </div> -->
 <!-- <br> <br> -->
-<!-- 	<div class="centered">
+	<div class="centered">
 		<img src="assets/img/snowday painting.jpg" width = "650"/>
 	</div>
 	<div class = "centered">
@@ -219,7 +219,7 @@
 		<p>Dog Summer</p>
 	</div>
 <br> <br>
- -->
+
 
 <!-- 
 
@@ -238,7 +238,7 @@
   </div> -->
 
 <!--   <br><br> -->
-<!-- 	<div class="centered">
+	<div class="centered">
 		<img src="assets/img/haircut full.jpg" width = "650"/>
 	</div>
 	<div class = "centered">
@@ -246,7 +246,7 @@
 		<p>Haircuts From Mom</p>
 	</div>
 
-	<br> <br> -->
+	<br> <br>
 	<!-- <div class="centered">
 	<img src="assets/img/perseids.jpg" width = "850"/>
 	</div><!-- /col-lg-8 --> -->
@@ -264,7 +264,7 @@
 		<p>November Walks</p>
 	</div> -->
 
-	<!-- <br> <br>
+	 <br> <br>
 	<div class="centered">
 		<img src="assets/img/winter woods.jpg" width = "650"/>
 	</div>
@@ -301,9 +301,9 @@
   <br>
   <div class = "centered">
     <p>Potted Plants</p> 
-  </div>-->
+  </div>
 
-<!-- 
+
     <div class="centered">
     <img src="assets/img/feynman charcoal.png" width = "600"/>
   </div>
@@ -342,7 +342,7 @@
 	<br>
 			<p>Emotional Kylo</p>
 	</div>
-
+<!-- 
 	<br><br>
 	<div class="centered">
 	<img src="assets/img/tom and vy.jpg" width = "650"/>
@@ -351,33 +351,9 @@
 	<br>
 			<p>Tom and Vy</p>
 	</div>
-
  -->
 
- 	<div id="overlay"></div>
-	<div id="masonry-grid">
-		<div class="grid-sizer"></div>
-
-		<div class = "grid-item">
-			 <div class="hovereffect">
-            <img class="img-responsive" src="assets/img/tom and vy.jpg" alt="">
-                <div class="overlay">
-                   <br> <br> <br> <br> <br> <br> <br> <br>
-            	<p> 
-              <a href="abovetheclouds.html">Above the Clouds</a>
-            </p> 
-                </div>
-         	</div>
-        </div>
-	    <!-- <div class="grid-item"> <img src="assets/img/tom and vy.jpg"/></div> -->
-	    <div id="grid-item-1" class="grid-item"> <img src="assets/img/winter woods.jpg"/> </div>
-
-	    <div id="grid-item-1" class="grid-item"> <img src="assets/img/potted plants.jpg"/></div>
-	    
-	    <div id="grid-item-1"  class="grid-item"> <img src="assets/img/snowday painting.jpg"/></div>
-	</div>
-
-	
+<!-- z -->
 	<br> <br> 
 	
 	<!-- +++++ Footer Section +++++ -->
@@ -398,35 +374,35 @@
 		    itemSelector : '.box'
 		  });
 		});</script> -->
-    <script src="assets/js/masonry.pkgd.min.js"></script>
+<!--     <script src="assets/js/masonry.pkgd.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"> </script>
-
-    <script>
-		// Javascript
-		var container = document.querySelector('#masonry-grid');
-		var msnry = new Masonry( container, {
+ -->
+    <!-- <script> -->
+<!-- 		// Javascript
+		// var container = document.querySelector('#masonry-grid');
+		// var msnry = new Masonry( container, {
 		  // options
-		  columnWidth: '.grid-sizer',
-		  gutter: 15,
-		  itemSelector: '.grid-item'
-		});
+		//   columnWidth: '.grid-sizer',
+		//   gutter: 15,
+		//   itemSelector: '.grid-item'
+		// });
 
-		$('#grid-item-1').click(function() {
-			$(this).addClass("grid-item-click-1");
-			$("#overlay").show();
-		});
+		// $('#grid-item-1').click(function() {
+		// 	$(this).addClass("grid-item-click-1");
+		// 	$("#overlay").show();
+		// }); -->
 		
-// just repeat this stuff below for allt he IDs 
+<!-- // just repeat this stuff below for allt he IDs 
 		// $('.grid-item').click(function() {
 		// 	$(this).addClass("grid-item-click");
 		// 	$("#overlay").show();
 		// });
 
-		$('#overlay').click(function() {
-			$(this).hide();
-			$('#grid-item-1').removeClass("grid-item-click-1");
-		})
-</script>
+		// $('#overlay').click(function() {
+		// 	$(this).hide();
+		// 	$('#grid-item-1').removeClass("grid-item-click-1");
+		// }) -->
+<!-- </script> -->
 
   </body>
 </html>
