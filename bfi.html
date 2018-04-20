@@ -1,0 +1,142 @@
+<html>
+	<head>
+		<title>From Garden to Pantry</title>
+		<link rel="stylesheet" href="assets/bfi_assets/css/style.css">
+		<link href="assets/bfi_assets/css/webfont.css" rel="stylesheet" type="text/css" />
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="assets/bfi_assets/js/script.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
+		<script src ="https://cdn.jsdelivr.net/npm/chartjs-plugin-deferred"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
+	</head>
+	<body>
+		<!-- Landing Page -->
+		<div id="landing-page-container">
+			<!-- Title animation -->
+			<?xml version="1.0" encoding="utf-8"?>
+			<svg version="1.1" id="title" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" 
+				 viewBox="0 0 976.8 340" preserveAspectRatio="xMinYMin meet" style="enable-background:new 0 0 976.8 340;" xml:space="preserve">
+			<style type="text/css">
+				.st0{fill:none;}
+				.st1{fill:none;stroke:#A7A9AC;}
+				.st1{font-family:'Quicksand-Regular';}
+				.st2{font-size:95px;}
+			</style>
+			<text transform="matrix(1 0 0 1 175.991 127.4985)"><tspan x="0" y="0" class="st0 st1 st2">from garden </tspan><tspan x="91.8" y="114" class="st0 st1 st2">to pantry</tspan></text>
+			</svg>	
+				<div id="open-button"> <div data-icon="&#xe017;" class="icon"></div> </div>
+		</div>
+		
+		<!-- Planting Seeds -->
+		<div class="content-divider">
+			<div id = "begin-page">
+				<div class = "h11"> <span class = "content-title"> planting the seeds </span></div>
+			</div>
+		</div>
+		<div class="content">
+			<div id = "content-pic">
+				<div class = "fade-in">		
+					<div id="seeds-img"> <img src="assets/bfi_assets/img/bfi planting seeds.png"/> </div>
+				</div>
+			</div>
+			<div id = "content-text-all">
+				<div id = "content-text"> Our food pantry is currently receiving donations from five campus farms and gardens, all of which are student-led or have strong student participation. This includes the UC Gill Tract Community Farm, Clark Kerr Chef’s Garden, the Student Organic Gardening Association (SOGA), the Oxford Tract research fields, and the on-campus Sustainable Landscape Decal.</div>
+				<div id = "content-text"> Student gardeners plan, design, grow, and harvest all of the produce and in doing so train hundreds of students a year on urban agriculture. </div>
+				<div id = "content-text"> Here's the amount of produce from each campus garden so far this semester.</div>
+			</div>
+			 <div id="chart">
+		        <canvas id="gardenChart" height="100%"></canvas>
+		    </div> 
+		</div>
+
+		<!-- How We Roll -->
+		<div class="content-divider">
+			<div class = "h11"> <span class = "content-title"> it's how we roll </span></div>
+		</div>
+		<div class="content">
+			<div id = "content-pic">	
+				<div class = "fade-in">
+					<div id="bike-img"> <img src="assets/bfi_assets/img/bfi bike.png"/> </div>
+				</div>
+			</div>
+			<div id = "content-text-all">
+				<div id = "content-text"> To get from the field to the pantry there are a variety of transportation methods from foot to car to electric vehicle. Most recently, we've also added bike trailers designed and built by a high school summer program in the College of Environmental Design. </div>
+				<div id = "content-text"> Green and sustainable&mdash;it's how we like to roll. </div>
+			</div>
+		</div>
+
+		<!-- Food For All -->
+		<div class="content-divider">
+			<div class = "h11"> <span class = "content-title"> food for all </span></div>
+		</div>
+		<div class="content">
+			<div id = "content-pic">
+				<div class = "fade-in">		
+					<div id="food-img"> <img src="assets/bfi_assets/img/bfi food pantry.png"/> </div>
+				</div>
+			</div>
+			<div id = "content-text-all">
+				<div id = "content-text"> Once in the pantry, produce gets resorted and displayed for students to take home and cook with. It adds to produce donated from other sources including local farmer’s markets, supermarkets and warehouse distribution recovered waste. </div>
+				<div id = "content-text"> Any produce about to go to waste is sent to the Berkeley Student Food Collective who repurposes the food into sliding scale meals. Here's what's in our pantry and where it all came from in the month of March. </div>
+			</div>
+			<div id = "pie-charts">
+				<div id = "pie">
+			   		<canvas id="pieChart1"></canvas>
+			   	</div>
+			   	<div id = "pie">
+			   		<canvas id="pieChart2"></canvas>
+			   	</div>
+		  	</div>
+		</div>
+
+		<!-- What do you want to eat? -->
+		<div class="content-divider">
+			<div class = "h11"> <span class = "content-title"> what do you want to eat? </span></div>
+		</div>
+		<div class="content">
+			<div id = "content-pic">
+				<div class = "fade-in">		
+					<div id="food-img"> <img src="assets/bfi_assets/img/bfi food demo.png"/> </div>
+				</div>
+			</div>
+			<div id = "content-text-all">
+				<div id = "content-text"> In coordination with University Health Services and the Nutritional Sciences and Toxicology Department, Basic Needs is working to integrate this produce into nutrition demonstrations and personal food security courses.
+				 </div>
+				<div id = "content-text"> The Food pantry also regularly surveys student users to better understand what produce they would like to see in the pantry and would like to learn how to cook. This information informs crop planning in the gardens, recipe development and workshops. </div>
+			</div>
+			<table id="food-table">
+			  <tr>
+			    <th>Produce</th>
+			    <th>Specific Foods</th>
+			  </tr>
+			  <tr>
+			    <td>Fruit</td>
+			    <td>Mandarin, oranges, apples </td>
+			  </tr>
+			  <tr>
+			    <td>Herbs</td>
+			    <td>Cilantro, chamomile, rosemary, thyme, bay, oregano, green onion, parsley </td>
+			  </tr>
+			  <tr>
+			    <td>Greens</td>
+			    <td>Collards, kale (baby, dino, curly), mustard greens, purple mustard, spinach, chard, arugula, anise, mint, lettuce, broccoli, nasturtiums</td>
+			  </tr>
+			  <tr>
+			    <td>Root Vegetables </td>
+			    <td>Radish, beets, carrots</td>		    
+			  </tr>
+			  <tr>
+			    <td>Cruciferous</td>
+			    <td>Broccoli, broccolini, brussel sprouts</td>
+			  </tr>
+			  <tr>
+			    <td>Squash</td>
+			    <td>Spaghetti squash</td>
+			  </tr>
+			</table>
+			
+		</div>
+
+	</body>
+</html>
