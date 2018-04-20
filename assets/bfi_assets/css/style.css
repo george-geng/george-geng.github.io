@@ -178,13 +178,18 @@ svg {
 	flex: 50%;
 }
 
+
 #food-table {
     font-family: "Quicksand", sans-serif;
     border-collapse: collapse;
     width: 80%;
     margin: 0 auto;
-    margin-bottom: 128px;
+}
 
+#food-table::after {
+    content: "";
+    display: block;
+    height: 128px;
 }
 
 #food-table td, #food-table th {
