@@ -61,7 +61,7 @@ svg {
 	bottom: 15%;
 	left:50%;
 	text-align: center;
-	font-size: 25px;
+	font-size: 28px;
 	color: #A7A9AC;
 }
 
@@ -76,14 +76,14 @@ svg {
 .content-divider {
 	margin: 0 auto; 
 	text-align: center;
-	padding-top: 128px;
-	padding-bottom: 96px;
+	padding-top: 160px;
+	padding-bottom: 160px;
 }
 
 .content-title {
 	font-family: "QuicksandDash-Regular";
 	font-weight: 100;
-	font-size: 54px;
+	font-size: 60px;
 	letter-spacing: 0.15em;
 	color: #A7A9AC;
 	text-transform: lowercase;
@@ -125,7 +125,8 @@ svg {
 }
 
 #content-text {
-	padding-top: 24px;
+	padding-top: 32px;
+	font-size: 18px;
 }
 
 #seeds-img img {
@@ -167,10 +168,10 @@ svg {
 #pie-charts{
 	display: flex;
 	text-align: center;
-	padding-top: 32px;
+	padding-top: 96px;
 	margin: 0 auto;
 	min-width: 800px !important; 
-	max-width: 1000px;
+	max-width: 1100px;
 	padding-bottom: 64px;
 }
 
@@ -186,10 +187,16 @@ svg {
     margin: 0 auto;
 }
 
+#food-table::before {
+    content: "";
+    display: block;
+    height: 32px;
+}
+
 #food-table::after {
     content: "";
     display: block;
-    height: 128px;
+    height: 184px;
 }
 
 #food-table td, #food-table th {

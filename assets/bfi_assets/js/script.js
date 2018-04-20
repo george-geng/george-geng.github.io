@@ -4,7 +4,7 @@ $(document).ready(function () {
 	
 	$("#open-button").click(function() {
 	    $('html,body').animate({
-	        scrollTop: $("#begin-page").offset().top - 96},
+	        scrollTop: $("#begin-page").offset().top - 60},
 	        1000,'easeOutSine');
 	});
 	
@@ -45,17 +45,18 @@ $(document).ready(function () {
 	     			title: {
             			display: true,
             			text: 'Monthly Food Pantry Donations by Source (Spring 2018)',
-            			fontSize: 16
+            			fontSize: 20
         			},
         			 responsive:true,
         			 maintainAspectRatio:false,
         			 scales: {
-        			 	xAxes: [{
 
+        			 	xAxes: [{
 					      scaleLabel: {
 					        display: true,
 					        labelString: 'Campus Garden',
-					        fontStyle: 'bold',
+					        // fontStyle: 'bold',
+					        fontSize: 18
 					      }
 					    }],
 					    yAxes: [{
@@ -65,7 +66,8 @@ $(document).ready(function () {
 					      scaleLabel: {
 					        display: true,
 					        labelString: 'Produce Donated (lbs)',
-					        fontStyle: 'bold'
+					        // fontStyle: 'bold',
+					        fontSize: 18
 					      }
 					    }]
 					  }     
@@ -96,7 +98,7 @@ $(document).ready(function () {
 	     			title: {
             			display: true,
             			text: 'Pantry Produce by Type (March 2018)',
-            			fontSize: 16
+            			fontSize: 20
         			},
         tooltips: {
 	      callbacks: {
@@ -114,7 +116,10 @@ $(document).ready(function () {
         responsive:true,
 	  	legend: {
 			display: true,
-			position: 'right'
+			position: 'right',
+			labels:{
+				fontSize: 16
+			}
 		},
 	  }
 	});
@@ -139,7 +144,7 @@ $(document).ready(function () {
 	     			title: {
             			display: true,
             			text: 'Pantry Produce by Source (March 2018)',
-            			fontSize: 16
+            			fontSize: 20
         			},
         tooltips: {
 	      callbacks: {
@@ -157,11 +162,15 @@ $(document).ready(function () {
         responsive:true,
 	  	legend: {
 			display: true,
-			position: 'right'
+			position: 'right',
+			labels:{
+				fontSize: 16
+			}
 		},
 	  }
 	});
 	  Chart.defaults.global.defaultFontFamily = "Quicksand";
+	  Chart.defaults.global.defaultFontSize = 14;
 });
 
  
