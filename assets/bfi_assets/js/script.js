@@ -1,16 +1,38 @@
 $(document).ready(function () {
-    var chartHidden = true;
-	var isVisible = false;
-	
+
+	$("#turnip img").fadeIn(5000);  
+	$("#broccoli img").fadeIn(5000);        
+	$("#tomato img").fadeIn(5000);  
+	$("#lettuce img").fadeIn(5000);        
+
+	var scrollToPage = false;
 	$("#open-button").click(function() {
 	    $('html,body').animate({
-	        scrollTop: $("#begin-page").offset().top - 60},
+	        scrollTop: $("#begin-page").offset().top - 128 + $('.icon-bar').height()},
 	        1000,'easeOutSine');
 	});
 	
-   /* Scrolling fade in images*/
-    $(window).scroll( function(){
-        $('.fade-in').each( function(i){         
+	$("#garden-icon").click(function() {
+		userScroll = false;
+		scrollToID("#begin-page", 1000); 
+	});
+	$("#bike-icon").click(function() {
+		userScroll = false;
+		scrollToID("#bike-page", 1000); 
+	});
+	$("#market-icon").click(function() {
+		userScroll= false;
+		scrollToID("#market-page", 1000); 
+	});
+	$("#demo-icon").click(function() {
+		userScroll = false;
+		scrollToID("#demo-page", 1000); 
+	});
+
+	var lastScrollTop = 0;
+    $(window).scroll( function(event){
+    	/* Scrolling fade in images*/
+        $('.fade-in').each( function(i){        
             var top_of_object = $(this).offset().top; /*+ $(this).outerHeight();*/
             var top_of_window = $(window).scrollTop(); /* + $(window).height();*/
             /* If the object peaks into window, fade it */
@@ -18,7 +40,32 @@ $(document).ready(function () {
                 $(this).animate({'opacity':'1'},3000);                   
             }      
         });   
+	   /* Hide or show menubar*/
+      	var st = $(this).scrollTop();
+     
+		var isNav1 = isAtSection('#begin-page')
+		var isNav2 = isAtSection('#bike-page');
+		var isNav3 = isAtSection('#market-page');
+		var isNav4 = isAtSection('#demo-page');
+		var isNav = isNav1 || isNav2 || isNav3 || isNav4;
+		   if (st > lastScrollTop && !isNav){
+		   	 $(".icon-bar").fadeOut(300);
+		   } else {
+		   	 $(".icon-bar").fadeIn(300);
+		   }
+		   lastScrollTop = st;
     });
+
+    function isAtSection(id){
+    	var pos1 = Math.floor($(id).offset().top - 128 + $('.icon-bar').height()); 
+    	var pos2 = Math.ceil($(id).offset().top - 128 + $('.icon-bar').height()); 
+    	return Math.round(($(this).scrollTop())) == pos1 || Math.round(($(this).scrollTop())) == pos2; 
+    }
+
+    function scrollToID(id, speed) {
+	    var targetOffset = $(id).offset().top - 128 + $('.icon-bar').height();
+	    $('html,body').animate({ scrollTop: targetOffset }, speed, 'easeOutSine');
+	}
 
     // Grouped bar chart
 	  var ctx = document.getElementById("gardenChart").getContext('2d');
@@ -73,6 +120,7 @@ $(document).ready(function () {
 					  }     
         	}
 	  });
+
 
 
 	// Pie Chart 1

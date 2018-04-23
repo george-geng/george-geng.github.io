@@ -1,7 +1,7 @@
 <html>
 	<head>
 		<title>From Garden to Pantry</title>
-		<link rel="stylesheet" href="assets/bfi_assets/css/style.css">
+		<link rel="stylesheet" href="asset/bfi_assets/css/style.css">
 		<link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet"
 		<link href="https://fonts.googleapis.com/css?family=Crimson+Text" rel="stylesheet">
 		<link href="assets/bfi_assets/css/webfont.css" rel="stylesheet" type="text/css" />
@@ -11,36 +11,59 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
 		<script src ="https://cdn.jsdelivr.net/npm/chartjs-plugin-deferred"></script>
 		<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
-
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	</head>
+
 	<body>
+		<!-- Navbar -->
+		<div class="icon-bar">
+		  <a href="#"> <div id = "garden-icon"> <img src = "assets/img/icons/garden icon.png"> </div> </a> 
+			<div id = "bike-icon"> <a href="#"><img src = "assets/img/icons/bike icon2.png"></i></div></a> 
+		  <a href="#"> 
+		  	<div id="market-icon"><img src = "assets/img/icons/market icon.png"></div></a>
+		  <div id = "demo-icon"><a href="#"><img src = "assets/img/icons/spoon icon.png"></a> </div>
+		</div>
+
 		<!-- Landing Page -->
 		<div id="landing-page-container">
-			<!-- Title animation -->
-			<?xml version="1.0" encoding="utf-8"?>
-			<svg version="1.1" id="title" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" 
-				 viewBox="0 0 976.8 340" preserveAspectRatio="xMinYMin meet" style="enable-background:new 0 0 976.8 340;" xml:space="preserve">
-			<style type="text/css">
-				.st0{fill:none;}
-				.st1{fill:none;stroke:#A7A9AC;}
-				.st1{font-family:'Quicksand';}
-				.st2{font-size:95px;}
-			</style>
-			<text transform="matrix(1 0 0 1 175.991 127.4985)"><tspan x="0" y="0" class="st0 st1 st2">from garden </tspan><tspan x="91.8" y="114" class="st0 st1 st2">to pantry</tspan></text>
-			</svg>	
+			<div id = "turnip">
+				<img src = "assets/bfi_assets/img/veg1.png">
+			</div>
+			<div id = "broccoli">
+				<img src = "assets/bfi_assets/img/veg3.png">
+			</div>
+			<div id = "tomato">
+				<img src = "assets/bfi_assets/img/veg2.png">
+			</div>
+			<div id = "lettuce">
+				<img src = "assets/bfi_assets/img/veg4.png">
+			</div>
+			<div id = "title">
+				<?xml version="1.0" encoding="utf-8"?>
+				<svg version="1.1" id="title" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+					 viewBox="0 0 499 340" style="enable-background:new 0 0 499 340;" xml:space="preserve">
+				<style type="text/css">
+					.st0{enable-background:new;}
+					.st1{fill:none;stroke:#A7A9AC;}
+					.st2{font-family:'Quicksand';}
+					.st3{font-size:75px;}
+				</style>
+				<text transform="matrix(1 0 0 1 14.1239 147.4998)" class="st0"><tspan x="0" y="0" class="st1 st2 st3">from garden</tspan><tspan x="61.2" y="90" class="st1 st2 st3">to pantry</tspan></text>
+				</svg>
+			</div> <!-- end title -->
+
 				<div id="open-button"> <div data-icon="&#xe017;" class="icon"></div> </div>
-		</div>
+			</div>
 		
 		<!-- Planting Seeds -->
 		<div class="content-divider">
-			<div id = "begin-page">
-				<div class = "h11"> <span class = "content-title"> planting the seeds </span></div>
-			</div>
+				<div class = "h11" id = "begin-page"> <span class = "content-title"> planting the seeds </span></div>
 		</div>
 		<div class="content">
 			<div id = "content-pic">
 				<div class = "fade-in">		
-					<div id="seeds-img"> <img src="assets/bfi_assets/img/bfi planting seeds.png"/> </div>
+					<div id="seeds-img"> <img src="assets/bfi_assets/img/bfi planting seeds.png"> </div>
+						<!-- onclick="openModal();currentSlide(1)" class="hover-shadow"/> </div> -->
 				</div>
 			</div>
 			<div id = "content-text-all">
@@ -55,12 +78,12 @@
 
 		<!-- How We Roll -->
 		<div class="content-divider">
-			<div class = "h11"> <span class = "content-title"> it's how we roll </span></div>
-		</div>
+			<div class = "h11" id = "bike-page"> <span class = "content-title"> it's how we roll </span></div>
+			</div>
 		<div class="content">
 			<div id = "content-pic">	
 				<div class = "fade-in">
-					<div id="bike-img"> <img src="assets/bfi_assets/img/bfi bike.png"/> </div>
+					<div id="bike-img"> <img src="assets/bfi_assetsimg/bfi bike.png"/> </div>
 				</div>
 			</div>
 			<div id = "content-text-all">
@@ -71,7 +94,7 @@
 
 		<!-- Food For All -->
 		<div class="content-divider">
-			<div class = "h11"> <span class = "content-title"> food for all </span></div>
+			<div class = "h11" id = "market-page"> <span class = "content-title"> food for all </span></div>
 		</div>
 		<div class="content">
 			<div id = "content-pic">
@@ -95,7 +118,7 @@
 
 		<!-- What do you want to eat? -->
 		<div class="content-divider">
-			<div class = "h11"> <span class = "content-title"> what do you want to eat? </span></div>
+			<div class = "h11" id = "demo-page"> <span class = "content-title"> what do you want to eat? </span></div>
 		</div>
 		<div class="content">
 			<div id = "content-pic">
@@ -140,6 +163,10 @@
 			</table>
 			
 		</div>
+
+	
+  </div>
+</div>
 
 	</body>
 </html>
