@@ -1,5 +1,6 @@
 $(document).ready(function () {
 
+	// jQuery Function Number 1
 	$("#turnip img").fadeIn(5000);  
 	$("#broccoli img").fadeIn(5000);        
 	$("#tomato img").fadeIn(5000);  
@@ -8,24 +9,21 @@ $(document).ready(function () {
 	var scrollToPage = false;
 	$("#open-button").click(function() {
 	    $('html,body').animate({
+	    	// jQuery Function Number 2
 	        scrollTop: $("#begin-page").offset().top - 128 + $('.icon-bar').height()},
 	        1000,'easeOutSine');
 	});
-	
+	// jQuery Function Number 3
 	$("#garden-icon").click(function() {
-		userScroll = false;
 		scrollToID("#begin-page", 1000); 
 	});
 	$("#bike-icon").click(function() {
-		userScroll = false;
 		scrollToID("#bike-page", 1000); 
 	});
 	$("#market-icon").click(function() {
-		userScroll= false;
 		scrollToID("#market-page", 1000); 
 	});
 	$("#demo-icon").click(function() {
-		userScroll = false;
 		scrollToID("#demo-page", 1000); 
 	});
 
@@ -34,21 +32,26 @@ $(document).ready(function () {
     	/* Scrolling fade in images*/
         $('.fade-in').each( function(i){        
             var top_of_object = $(this).offset().top; /*+ $(this).outerHeight();*/
+            // jQuery Function Number 4
             var top_of_window = $(window).scrollTop(); /* + $(window).height();*/
             /* If the object peaks into window, fade it */
+
+            // jQuery Function Number 5
             if( top_of_window + $(window).height() - 200 > top_of_object){             
-                $(this).animate({'opacity':'1'},3000);                   
+                $(this).css({'opacity':'1', transition:'3s'});                   
             }      
-        });   
+        });  
 	   /* Hide or show menubar*/
       	var st = $(this).scrollTop();
-     
 		var isNav1 = isAtSection('#begin-page');
+		// console.log(st);
+		// console.log(Math.floor($('#begin-page').offset().top - 128 + $('.icon-bar').height()));
 		var isNav2 = isAtSection('#bike-page');
 		var isNav3 = isAtSection('#market-page');
 		var isNav4 = isAtSection('#demo-page');
 		var isNav = isNav1 || isNav2 || isNav3 || isNav4;
 		   if (st > lastScrollTop && !isNav){
+			// JQuery Function Number 6
 		   	 $(".icon-bar").fadeOut(300);
 		   } else {
 		   	 $(".icon-bar").fadeIn(300);
