@@ -43,7 +43,7 @@ $(document).ready(function () {
 	   /* Hide or show menubar*/
       	var st = $(this).scrollTop();
      
-		var isNav1 = isAtSection('#begin-page')
+		var isNav1 = isAtSection('#begin-page');
 		var isNav2 = isAtSection('#bike-page');
 		var isNav3 = isAtSection('#market-page');
 		var isNav4 = isAtSection('#demo-page');
