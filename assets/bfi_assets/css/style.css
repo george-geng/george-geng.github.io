@@ -419,24 +419,28 @@ svg {
   opacity: 0.7;
   transition: all 0.3s ease;
   transform: scale(1.1);
+  cursor: pointer;
 }
 
 #bike-icon img:hover {
   opacity: 0.7;
   transition: all 0.3s ease;
   transform: scale(1.1);
+  cursor: pointer;
 }
 
 #market-icon img:hover {
   opacity: 0.7;
   transition: all 0.3s ease;
   transform: scale(1.1);
+  cursor: pointer;
 }
 
 #demo-icon img:hover {
   opacity: 0.7;
   transition: all 0.3s ease;
   transform: scale(1.1);
+  cursor: pointer;
 }
 
 .icon-bar a {

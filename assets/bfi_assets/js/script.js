@@ -14,16 +14,16 @@ $(document).ready(function () {
 	        1000,'easeOutSine');
 	});
 	// jQuery Function Number 3
-	$("#garden-icon").click(function() {
+	$("#garden-icon img").click(function() {
 		scrollToID("#begin-page", 1000); 
 	});
-	$("#bike-icon").click(function() {
+	$("#bike-icon img").click(function() {
 		scrollToID("#bike-page", 1000); 
 	});
-	$("#market-icon").click(function() {
+	$("#market-icon img").click(function() {
 		scrollToID("#market-page", 1000); 
 	});
-	$("#demo-icon").click(function() {
+	$("#demo-icon img").click(function() {
 		scrollToID("#demo-page", 1000); 
 	});
 
