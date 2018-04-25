@@ -385,6 +385,7 @@ svg {
     overflow: auto; /* Overflow due to float */
     position: fixed;
     z-index: 100;
+    overflow-y: hidden;
     /*opacity: 0;*/
     top:0px;
     display: none;
