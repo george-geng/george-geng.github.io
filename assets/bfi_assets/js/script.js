@@ -28,24 +28,74 @@ $(document).ready(function () {
 	});
 
 	var lastScrollTop = 0;
+
     $(window).scroll( function(event){
+    	//See what section is active
+    	var currentScroll = $(this).scrollTop();
+    	var $currentSection;
+		
+		  // We check the position of each of the divs compared to the windows scroll positon
+	    $('.h11').each(function(i){
+	      var divPosition = $(this).offset().top - 128 + $('.icon-bar').height();
+	      if( divPosition - 1 < currentScroll ){
+	        $currentSection = $(this);
+	      }
+	      var id = $currentSection.attr('id');
+	      // console.log(id);
+	      if (id == "begin-page"){
+	      	$("#garden-icon img").css({'opacity':'0.85', 'border-bottom':'3.5px solid #252525'});
+	      	$("#bike-icon img").css({'opacity':'0.3', 'border-bottom': 'none'});
+	      	$("#market-icon img").css({'opacity':'0.3', 'border-bottom': 'none'});
+	      	$("#demo-icon img").css({'opacity':'0.3', 'border-bottom': 'none'});
+	      }
+	      else if (id == "bike-page") {
+	      	$("#bike-icon img").css({'opacity':'0.85', 'border-bottom':'3.5px solid #252525'});
+	      	$("#garden-icon img").css({'opacity':'0.3', 'border-bottom': 'none'});
+			$("#market-icon img").css({'opacity':'0.3', 'border-bottom': 'none'});
+	      	$("#demo-icon img").css({'opacity':'0.3', 'border-bottom': 'none'});
+	      }
+	      else if (id == "market-page") {
+	      	$("#market-icon img").css({'opacity':'0.85', 'border-bottom':'3.5px solid #252525'});
+	      	$("#bike-icon img").css({'opacity':'0.3', 'border-bottom': 'none'});
+	      	$("#garden-icon img").css({'opacity':'0.3', 'border-bottom': 'none'});
+			$("#demo-icon img").css({'opactity':'0.3', 'border-bottom': 'none'});
+	      }
+	      else if (id == "demo-page") {
+	      	$("#market-icon img").css({'opacity':'0.3', 'border-bottom': 'none'});
+	      	$("#bike-icon img").css({'opacity':'0.3', 'border-bottom': 'none'});
+	      	$("#garden-icon img").css({'opacity':'0.3', 'border-bottom': 'none'});
+	      	$("#demo-icon img").css({'opacity':'0.85', 'border-bottom':'3.5px solid #252525'});
+	      }
+      
+    	})
+      
     	/* Scrolling fade in images*/
+        $('.content-title').each( function(i){        
+            var top_of_object = $(this).offset().top; /*+ $(this).outerHeight();*/
+            // jQuery Function Number 4
+            var top_of_window = $(window).scrollTop(); /* + $(window).height();*/
+            /* If the object peaks into window, fade it */
+            // jQuery Function Number 5
+            if( top_of_window + $(window).height() - 200 > top_of_object){             
+                $(this).css({'opacity':'1', transition:'2s'});                   
+            }      
+        });  
+
+        /* Also fade in titles */
         $('.fade-in').each( function(i){        
             var top_of_object = $(this).offset().top; /*+ $(this).outerHeight();*/
             // jQuery Function Number 4
             var top_of_window = $(window).scrollTop(); /* + $(window).height();*/
             /* If the object peaks into window, fade it */
-
             // jQuery Function Number 5
             if( top_of_window + $(window).height() - 200 > top_of_object){             
                 $(this).css({'opacity':'1', transition:'3s'});                   
             }      
         });  
+
 	   /* Hide or show menubar*/
       	var st = $(this).scrollTop();
 		var isNav1 = isAtSection('#begin-page');
-		// console.log(st);
-		// console.log(Math.floor($('#begin-page').offset().top - 128 + $('.icon-bar').height()));
 		var isNav2 = isAtSection('#bike-page');
 		var isNav3 = isAtSection('#market-page');
 		var isNav4 = isAtSection('#demo-page');
