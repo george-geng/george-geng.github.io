@@ -30,6 +30,7 @@ $(document).ready(function () {
 	var lastScrollTop = 0;
 
     $(window).scroll( function(event){
+
     	//See what section is active
     	var currentScroll = $(this).scrollTop();
     	var $currentSection;
@@ -86,6 +87,8 @@ $(document).ready(function () {
             var top_of_object = $(this).offset().top; /*+ $(this).outerHeight();*/
             // jQuery Function Number 4
             var top_of_window = $(window).scrollTop(); /* + $(window).height();*/
+            console.log( top_of_window + $(window).height() - 200);
+            console.log(top_of_object);
             /* If the object peaks into window, fade it */
             // jQuery Function Number 5
             if( top_of_window + $(window).height() - 200 > top_of_object){             
@@ -198,7 +201,7 @@ $(document).ready(function () {
 	  	plugins:{"deferred": { "yOffset": 100, "delay": 300 } }, 
 	     			title: {
             			display: true,
-            			text: 'Pantry Produce by Type (March 2018)',
+            			text: 'Produce by Type (March 2018)',
             			fontSize: 20
         			},
         tooltips: {
@@ -215,11 +218,12 @@ $(document).ready(function () {
 	      }
 	    },
         responsive:true,
+        // maintainAspectRatio:false,
 	  	legend: {
 			display: true,
 			position: 'right',
 			labels:{
-				fontSize: 16
+				fontSize: 14
 			}
 		},
 	  }
@@ -231,7 +235,7 @@ $(document).ready(function () {
 	var myChart = new Chart(ctx3, {
 	  type: 'pie',
 	  data: {
-	    labels: ["Gardens", "Warehouse Waste Recovery"],
+	    labels: ["Gardens", "Warehouse"],
 	    datasets: [{
 	      backgroundColor: [
 	        "#A84A19",
@@ -244,7 +248,7 @@ $(document).ready(function () {
 	  	plugins:{"deferred": { "yOffset": 100, "delay": 400 } }, 
 	     			title: {
             			display: true,
-            			text: 'Pantry Produce by Source (March 2018)',
+            			text: 'Produce by Source (March 2018)',
             			fontSize: 20
         			},
         tooltips: {
@@ -261,11 +265,12 @@ $(document).ready(function () {
 	      }
 	    },
         responsive:true,
+         // maintainAspectRatio:false,
 	  	legend: {
 			display: true,
 			position: 'right',
 			labels:{
-				fontSize: 16
+				fontSize: 14
 			}
 		},
 	  }
